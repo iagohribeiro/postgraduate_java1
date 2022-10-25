@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.iagohribeiro.iagohribeirolima_atividade01;
+package com.iagohribeiro.iagohribeirolima_atividade03;
 
 /**
  *
  * @author iagohribeiro
  */
-public class Veiculo {
+public abstract class Veiculo {
     
     private String placa;       
     private String marca;
@@ -44,7 +44,7 @@ public class Veiculo {
         return placa;
     }
 
-    public void setPlaca(String placa) {
+    final public void setPlaca(String placa) {
         this.placa = placa;
     }
 
@@ -52,7 +52,7 @@ public class Veiculo {
         return marca;
     }
 
-    public void setMarca(String marca) {
+    final public void setMarca(String marca) {
         this.marca = marca;
     }
 
@@ -60,7 +60,7 @@ public class Veiculo {
         return modelo;
     }
 
-    public void setModelo(String modelo) {
+    final public void setModelo(String modelo) {
         this.modelo = modelo;
     }
 
@@ -68,7 +68,7 @@ public class Veiculo {
         return cor;
     }
 
-    public void setCor(String cor) {
+    final public void setCor(String cor) {
         this.cor = cor;
     }
 
@@ -76,7 +76,7 @@ public class Veiculo {
         return velocMax;
     }
 
-    public void setVelocMax(float velocMax) {
+    final public void setVelocMax(float velocMax) {
         this.velocMax = velocMax;
     }
 
@@ -84,7 +84,7 @@ public class Veiculo {
         return qtdRodas;
     }
 
-    public void setQtdRodas(int qtdRodas) {
+    final public void setQtdRodas(int qtdRodas) {
         this.qtdRodas = qtdRodas;
     }
 
@@ -92,13 +92,31 @@ public class Veiculo {
         return motor;
     }
 
-    public void setMotor(Motor motor) {
+    final public void setMotor(Motor motor) {
         this.motor = motor;
 
     }
-    public void setMotor(int qtdPist, int potencia) {
+    final public void setMotor(int qtdPist, int potencia) {
         this.motor.setQtdPist(qtdPist);
         this.motor.setPotencia(potencia);
+    }
+    
+    public abstract float calcVel (float velocMax);
+    
+    @Override
+    public String toString (){
+        String veiculoOutput;
+        
+        veiculoOutput = "Placa: " + this.getPlaca() + "\n"
+        + "Marca: " + this.getMarca() + "\n"
+        + "Modelo: " + this.getModelo() + "\n"
+        + "Cor: " + this.getCor() + "\n"
+        + "Velocidade Maxima Km/h: " + this.getVelocMax() + "\n"
+        + "Quantidade de Rodas: " + this.getQtdRodas() + "\n"
+        + "Quantidade de Pistao: " + this.getMotor().getQtdPist() + "\n"
+        + "Potencia: " + this.getMotor().getPotencia();
+        
+        return veiculoOutput;
     }
 }
 
