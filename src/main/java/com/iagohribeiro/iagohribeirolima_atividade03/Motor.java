@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.iagohribeiro.iagohribeirolima_atividade01;
+package com.iagohribeiro.iagohribeirolima_atividade03;
 
 /**
  *
@@ -30,7 +30,7 @@ public class Motor {
         return qtdPist;
     }
 
-    public void setQtdPist(int qtdPist) {
+    final public void setQtdPist(int qtdPist) {
         this.qtdPist = qtdPist;
     }
 
@@ -38,7 +38,7 @@ public class Motor {
         return potencia;
     }
 
-    public void setPotencia(int potencia) {
+    final public void setPotencia(int potencia) {
         this.potencia = potencia;
     }
 }
