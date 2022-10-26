@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.iagohribeiro.iagohribeirolima_atividade03;
+package com.iagohribeiro.iagohribeirolima_atividade04;
 
 /**
  *
  * @author iagohribeiro
  */
-final public class Passeio extends Veiculo {
+final public class Passeio extends Veiculo implements Calcular {
     
     private int qtdPassageiros;
 
@@ -49,6 +49,18 @@ final public class Passeio extends Veiculo {
     @Override
     public float calcVel(float velocMax) {
         return velocMax*1000.0F;
+    }
+    
+    @Override
+    public int calcular(){
+        int sumStrings =0;
+        
+        sumStrings += getPlaca().length();
+        sumStrings += getMarca().length();
+        sumStrings += getModelo().length();
+        sumStrings += getCor().length();
+        
+        return sumStrings;
     }
     
 }
