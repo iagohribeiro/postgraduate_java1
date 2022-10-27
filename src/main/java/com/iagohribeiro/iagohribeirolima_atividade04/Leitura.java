@@ -4,9 +4,9 @@
  */
 package com.iagohribeiro.iagohribeirolima_atividade04;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
 
 /**
  *
@@ -15,17 +15,22 @@ import java.util.Scanner;
 public class Leitura {
     public String entDados (String dados){
         
-        Scanner entry = new Scanner(System.in);
+        System.out.println(dados);
+        
+        InputStreamReader entrada = new InputStreamReader(System.in);
+        BufferedReader buffer = new BufferedReader(entrada);
+        
+        String retorno = "";
         
         try{
-            entry.nextLine();
+            retorno = buffer.readLine();
         }
-        catch(InputMismatchException e)
+        catch(IOException e)
         {
             System.out.print("\nErro na entrada de dados: " + e);
         
         }
         
-        return entry.toString();
+        return retorno;
     }
 }
