@@ -5,6 +5,8 @@
 
 package com.iagohribeiro.iagohribeirolima_atividade04;
 
+import java.text.MessageFormat;
+
 /**
  *
  * @author iagohribeiro
@@ -14,10 +16,12 @@ public class Teste {
     private static Passeio newVeiculoPasseio = new Passeio();
     private static Carga newVeiculoCarga = new Carga();
     
-    private static Carga[] carga = new Carga[10];
-    private static Passeio[] passeio = new Passeio[10];
+    private static Carga[] carga = new Carga[5];
+    private static Passeio[] passeio = new Passeio[5];
     
     private static Leitura entradaUsuario = new Leitura();
+    
+    private static boolean retornaMenu = false;
 
     public static void main(String[] args) {
         
@@ -60,11 +64,126 @@ public class Teste {
                         newVeiculoPasseio = new Passeio();
                         passeio[i] = preenchePasseio(newVeiculoPasseio);
                         
+                        if (retornaMenu)
+                        {
+                            retornaMenu = false;
+                            passeio[i] = null;
+                            break;
+                        }
+                        
+                        String mensagem = MessageFormat.format("Veiculo de Passeio cadastrado com Sucesso na posicao {0}. Aperte ENTER.", i);
+                        entradaUsuario.entDados(mensagem);
+                        
+                        if (!(checaVetor(1) == -1))
+                        {
+                            String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Passeio? <s/n>");
+                            
+                            if(retorno.toLowerCase().equals("N".toLowerCase()) || !retorno.toLowerCase().equals("S".toLowerCase()))
+                                break;
+                        }
+                        else
+                        {
+                            entradaUsuario.entDados("\nO Vetor de Veiculos de Passeio esta cheio. "
+                                                    + "Nao ha possbilidade de adicionar outro veiculo desse tipo."
+                                                    + " Aperte ENTER para voltar ao MENU.");
+                            break;
+                        }                        
                     }   break;
+                    
+                case 2:
+                    for(int i=checaVetor(2); i<carga.length; i++)
+                    {
+                        if(i == -1)
+                        {
+                            entradaUsuario.entDados("O Vetor de Veiculos de Carga esta cheio. Aperte ENTER para voltar ao MENU.");
+                            break;
+                        }
+                        
+                        newVeiculoCarga = new Carga();
+                        carga[i] = preencheCarga(newVeiculoCarga);
+                        
+                        if (retornaMenu)
+                        {
+                            retornaMenu = false;
+                            carga[i] = null;
+                            break;
+                        }
+                        
+                        String mensagem = MessageFormat.format("Veiculo de Passeio cadastrado com Sucesso na posicao {0}. Aperte ENTER.", i);
+                        entradaUsuario.entDados(mensagem);
+                        
+                        if (!(checaVetor(2) == -1))
+                        {
+                            String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Carga? <s/n>");
+                            
+                            if(retorno.toLowerCase().equals("N".toLowerCase()))
+                                break;
+                        }
+                        else
+                        {
+                            entradaUsuario.entDados("\nO Vetor de Veiculos de Carga esta cheio. "
+                                                    + "Nao ha possbilidade de adicionar outro veiculo desse tipo."
+                                                    + " Aperte ENTER para voltar ao MENU.");
+                            break;
+                        }                        
+                    }   break;
+                    
+                case 3:
+                    for (Passeio passeioElem : passeio) {
+                        if (passeioElem!= null)
+                        {
+                            impPasseio(passeioElem);
+                        }
+                    }
+                    break;
+                    
+                case 4:
+                    for (Carga cargaElem : carga) {
+                        if (cargaElem!= null)
+                        {
+                            impCarga(cargaElem);
+                        }
+                    }
+                    break;
+                    
+                case 5:      
+                    String placa = entradaUsuario.entDados("Digite a placa do Veiculo de Passeio.");
+                    
+                    for (Passeio passeioElem : passeio) {
+                        if (passeioElem!= null)
+                        {
+                            if (passeioElem.getPlaca().toLowerCase().equals(placa.toLowerCase()))
+                            {
+                                impPasseio(passeioElem);
+                                break;
+                            }
+                        }
+                    }
+                    System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
+                    break;
+                    
+                case 6:      
+                    String placaCarga = entradaUsuario.entDados("Digite a placa do Veiculo de Carga.");
+                    
+                    for (Carga cargaElem : carga) {
+                        if (cargaElem!= null)
+                        {
+                            if (cargaElem.getPlaca().toLowerCase().equals(placaCarga.toLowerCase()))
+                            {
+                                impCarga(cargaElem);
+                                break;
+                            }
+                        }
+                    }
+                    System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
+                    break;
+                    
                 case 7:
                     executando = false;
                     break;
+                    
                 default:
+                    System.out.println("\nPor favor digite um número entre 1 e 7\n");
                     break;
             }
             
@@ -113,10 +232,35 @@ public class Teste {
         veiculo.getMotor().setQtdPist(Integer.parseInt(entradaUsuario.entDados("Quantidade Pistoes do motor.:")));
         veiculo.getMotor().setPotencia(Integer.parseInt(entradaUsuario.entDados("Potencia do motor..:")));
         
+        for (Passeio passeioElem : passeio) {
+            if (passeioElem!= null)
+            {
+                if (passeioElem.getPlaca().toLowerCase().equals(veiculo.getPlaca().toLowerCase())) {
+                    System.out.println(MessageFormat.format("Ja foi cadastrado um Veiculo com mesma placa {0}",veiculo.getPlaca()));
+                    retornaMenu = true;
+                }
+                break;
+            }
+        }
+        
         return veiculo;
     }
     
-    public static Carga preenchePasseio(Carga veiculo)
+    public static void impPasseio(Passeio passeio){
+        System.out.println("Qtd de Passageiros......: "+ passeio.getQtdPassageiros());
+        System.out.println("Placa..: "+ passeio. getPlaca());
+        System.out.println("Marca........: "+ passeio.getMarca());
+        System.out.println("Modelo...................: "+ passeio.getModelo());
+        System.out.println("Cor..................:"+ passeio.getCor());
+        System.out.println("Qtd de Rodas............."+ passeio.getQtdRodas());
+        System.out.println("VelocidadeMaxima........"+ passeio.getVelocMax());
+        System.out.println("Qtd Pistoes de motor...: "+ passeio.getMotor().getQtdPist());
+        System.out.println("Potencia do motor.......:"+ passeio.getMotor().getPotencia());
+        System.out.println("Qtd. total de Letras....:"+ passeio.calcular());
+        System.out.println("Calc Vel Maxima em meter/hour: " + passeio.calcVel(passeio.getVelocMax()));
+    }
+    
+    public static Carga preencheCarga(Carga veiculo)
     {
         System.out.println("\n\n--------------------------------------");
         System.out.println("Cadastro de Veiculos de Carga");
@@ -132,6 +276,31 @@ public class Teste {
         veiculo.getMotor().setQtdPist(Integer.parseInt(entradaUsuario.entDados("Quantidade Pistoes do motor.:")));
         veiculo.getMotor().setPotencia(Integer.parseInt(entradaUsuario.entDados("Potencia do motor..:")));
         
+        for (Carga cargaElem : carga) {
+            if (cargaElem!= null)
+            {
+                if (cargaElem.getPlaca().toLowerCase().equals(veiculo.getPlaca().toLowerCase())) {
+                    System.out.println(MessageFormat.format("Ja foi cadastrado um Veiculo com mesma placa {0}",veiculo.getPlaca()));
+                    retornaMenu = true;
+                }
+                break;
+            }
+        }
+        
         return veiculo;
+    }
+    public static void impCarga(Carga carga){
+        System.out.println("Tara......: "+ carga.getTara());
+        System.out.println("Carga Maxima......: "+ carga.getCargaMax());
+        System.out.println("Placa..: "+ carga. getPlaca());
+        System.out.println("Marca........: "+ carga.getMarca());
+        System.out.println("Modelo...................: "+ carga.getModelo());
+        System.out.println("Cor..................:"+ carga.getCor());
+        System.out.println("Qtd de Rodas............."+ carga.getQtdRodas());
+        System.out.println("VelocidadeMaxima........"+ carga.getVelocMax());
+        System.out.println("Qtd Pistoes de motor...: "+ carga.getMotor().getQtdPist());
+        System.out.println("Potencia do motor.......:"+ carga.getMotor().getPotencia());
+        System.out.println("Qtd. total atributos Numericos....:"+ carga.calcular());
+        System.out.println("Calc Vel Maxima em cetimetro/hour: " + carga.calcVel(carga.getVelocMax()));
     }
 }
