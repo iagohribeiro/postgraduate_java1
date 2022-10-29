@@ -41,7 +41,7 @@ public class Teste {
                            \t\t\t\t7. Sair do Sistema
                            """);
             try{
-                escolha = Integer.parseInt(entradaUsuario.entDados("\nEscolha uma opcao do Menu"));
+                escolha = Integer.parseInt(entradaUsuario.entDados("\nEscolha uma opcao do Menu:"));
             }
             catch(NumberFormatException e)
             {
@@ -76,9 +76,9 @@ public class Teste {
                         
                         if (!(checaVetor(1) == -1))
                         {
-                            String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Passeio? <s/n>");
+                            String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Passeio? <sim/nao>");
                             
-                            if(retorno.toLowerCase().equals("N".toLowerCase()) || !retorno.toLowerCase().equals("S".toLowerCase()))
+                            if(retorno.toLowerCase().equals("nao".toLowerCase()) || !retorno.toLowerCase().equals("sim".toLowerCase()))
                                 break;
                         }
                         else
@@ -114,9 +114,9 @@ public class Teste {
                         
                         if (!(checaVetor(2) == -1))
                         {
-                            String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Carga? <s/n>");
+                            String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Carga? <sim/nao>");
                             
-                            if(retorno.toLowerCase().equals("N".toLowerCase()))
+                            if(retorno.toLowerCase().equals("nao".toLowerCase()) || !retorno.toLowerCase().equals("sim".toLowerCase()))
                                 break;
                         }
                         else
@@ -129,8 +129,12 @@ public class Teste {
                     }   break;
                     
                 case 3:
+                    System.out.println("\n\n--------------------------------------");
+                    System.out.println("Todos Veiculos de Passeio");
+                    System.out.println("--------------------------------------");
+                    
                     for (Passeio passeioElem : passeio) {
-                        if (passeioElem!= null)
+                        if (passeioElem != null)
                         {
                             impPasseio(passeioElem);
                         }
@@ -138,8 +142,12 @@ public class Teste {
                     break;
                     
                 case 4:
+                    System.out.println("\n\n--------------------------------------");
+                    System.out.println("Todos Veiculos de Carga");
+                    System.out.println("--------------------------------------");
+                    
                     for (Carga cargaElem : carga) {
-                        if (cargaElem!= null)
+                        if (cargaElem != null)
                         {
                             impCarga(cargaElem);
                         }
@@ -148,34 +156,45 @@ public class Teste {
                     
                 case 5:      
                     String placa = entradaUsuario.entDados("Digite a placa do Veiculo de Passeio.");
+                    boolean temPlacaPasseio = false;
                     
+                    //Verifica se existe e imprime o veiculo a partir da placa fornecida
                     for (Passeio passeioElem : passeio) {
                         if (passeioElem!= null)
                         {
                             if (passeioElem.getPlaca().toLowerCase().equals(placa.toLowerCase()))
                             {
                                 impPasseio(passeioElem);
+                                temPlacaPasseio = true;
                                 break;
                             }
                         }
                     }
-                    System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
+                    
+                    if (!temPlacaPasseio)
+                        System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
+                    
                     break;
                     
                 case 6:      
                     String placaCarga = entradaUsuario.entDados("Digite a placa do Veiculo de Carga.");
-                    
+                    boolean temPlaca = false;
+                    //Verifica se existe e imprime o veiculo a partir da placa fornecida
                     for (Carga cargaElem : carga) {
-                        if (cargaElem!= null)
+                        if (cargaElem != null)
                         {
                             if (cargaElem.getPlaca().toLowerCase().equals(placaCarga.toLowerCase()))
                             {
                                 impCarga(cargaElem);
+                                temPlaca = true;
                                 break;
                             }
                         }
                     }
-                    System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
+                    
+                    if (!temPlaca)
+                        System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
+                    
                     break;
                     
                 case 7:
@@ -185,15 +204,15 @@ public class Teste {
                 default:
                     System.out.println("\nPor favor digite um número entre 1 e 7\n");
                     break;
-            }
-            
-            
+            }  
         }
-        
     }
     
+    //Metodo para verificar os vetores 
     public static int checaVetor (int opcaoMenu)
     {
+        /*Se for a opcao 1 do menu, o vertor passeio sera analisado.
+           Caso contrario, sera o de carga*/
         if(opcaoMenu == 1)
         {
             for(int i=0; i<passeio.length; i++)
@@ -217,6 +236,7 @@ public class Teste {
         return -1;
     }
     
+    //Metodo para preencher o objeto de pasaseio
     public static Passeio preenchePasseio(Passeio veiculo)
     {
         System.out.println("\n\n--------------------------------------");
@@ -236,7 +256,7 @@ public class Teste {
             if (passeioElem!= null)
             {
                 if (passeioElem.getPlaca().toLowerCase().equals(veiculo.getPlaca().toLowerCase())) {
-                    System.out.println(MessageFormat.format("Ja foi cadastrado um Veiculo com mesma placa {0}",veiculo.getPlaca()));
+                    System.out.println(MessageFormat.format("\n\n\nJa foi cadastrado um Veiculo com mesma placa {0}\n\n\n",veiculo.getPlaca()));
                     retornaMenu = true;
                 }
                 break;
@@ -246,20 +266,24 @@ public class Teste {
         return veiculo;
     }
     
+    //Metodo para imprimir objetos de veiculos de passeio
     public static void impPasseio(Passeio passeio){
-        System.out.println("Qtd de Passageiros......: "+ passeio.getQtdPassageiros());
+        System.out.println("----------------------------------------");
         System.out.println("Placa..: "+ passeio. getPlaca());
         System.out.println("Marca........: "+ passeio.getMarca());
         System.out.println("Modelo...................: "+ passeio.getModelo());
-        System.out.println("Cor..................:"+ passeio.getCor());
-        System.out.println("Qtd de Rodas............."+ passeio.getQtdRodas());
-        System.out.println("VelocidadeMaxima........"+ passeio.getVelocMax());
+        System.out.println("Cor..................: "+ passeio.getCor());
+        System.out.println("VelocidadeMaxima........: "+ passeio.getVelocMax());
+        System.out.println("Qtd de Rodas.............: "+ passeio.getQtdRodas());
         System.out.println("Qtd Pistoes de motor...: "+ passeio.getMotor().getQtdPist());
-        System.out.println("Potencia do motor.......:"+ passeio.getMotor().getPotencia());
-        System.out.println("Qtd. total de Letras....:"+ passeio.calcular());
-        System.out.println("Calc Vel Maxima em meter/hour: " + passeio.calcVel(passeio.getVelocMax()));
+        System.out.println("Potencia do motor.......: "+ passeio.getMotor().getPotencia());
+        System.out.println("Qtd de Passageiros......: "+ passeio.getQtdPassageiros());
+        System.out.println("Qtd. total de Letras....: "+ passeio.calcular());
+        System.out.println("Calc Vel Maxima em meter/hour: " + passeio.calcVel(passeio.getVelocMax())+"\n");
+        System.out.println("----------------------------------------\n");
     }
     
+    //Metodo para preencher o objeto de carga
     public static Carga preencheCarga(Carga veiculo)
     {
         System.out.println("\n\n--------------------------------------");
@@ -280,27 +304,30 @@ public class Teste {
             if (cargaElem!= null)
             {
                 if (cargaElem.getPlaca().toLowerCase().equals(veiculo.getPlaca().toLowerCase())) {
-                    System.out.println(MessageFormat.format("Ja foi cadastrado um Veiculo com mesma placa {0}",veiculo.getPlaca()));
+                    System.out.println(MessageFormat.format("\n\n\nJa foi cadastrado um Veiculo com mesma placa {0}\n\n\n",veiculo.getPlaca()));
                     retornaMenu = true;
                 }
                 break;
             }
         }
-        
         return veiculo;
     }
+    
+    //Metodo para imprimir objetos de veiculos de carga
     public static void impCarga(Carga carga){
-        System.out.println("Tara......: "+ carga.getTara());
-        System.out.println("Carga Maxima......: "+ carga.getCargaMax());
+        System.out.println("----------------------------------------");
         System.out.println("Placa..: "+ carga. getPlaca());
         System.out.println("Marca........: "+ carga.getMarca());
         System.out.println("Modelo...................: "+ carga.getModelo());
-        System.out.println("Cor..................:"+ carga.getCor());
-        System.out.println("Qtd de Rodas............."+ carga.getQtdRodas());
-        System.out.println("VelocidadeMaxima........"+ carga.getVelocMax());
+        System.out.println("Cor..................: "+ carga.getCor());
+        System.out.println("VelocidadeMaxima........: "+ carga.getVelocMax());
+        System.out.println("Qtd de Rodas.............: "+ carga.getQtdRodas());
         System.out.println("Qtd Pistoes de motor...: "+ carga.getMotor().getQtdPist());
-        System.out.println("Potencia do motor.......:"+ carga.getMotor().getPotencia());
-        System.out.println("Qtd. total atributos Numericos....:"+ carga.calcular());
+        System.out.println("Potencia do motor.......: "+ carga.getMotor().getPotencia());
+        System.out.println("Carga Maxima......: "+ carga.getCargaMax());
+        System.out.println("Tara......: "+ carga.getTara());
+        System.out.println("Qtd. total atributos Numericos....: "+ carga.calcular());
         System.out.println("Calc Vel Maxima em cetimetro/hour: " + carga.calcVel(carga.getVelocMax()));
+        System.out.println("----------------------------------------\n");
     }
 }
