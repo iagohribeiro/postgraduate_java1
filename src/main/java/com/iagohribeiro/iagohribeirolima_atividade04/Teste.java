@@ -83,9 +83,12 @@ public class Teste {
                         }
                         else
                         {
-                            entradaUsuario.entDados("\nO Vetor de Veiculos de Passeio esta cheio. "
-                                                    + "Nao ha possbilidade de adicionar outro veiculo desse tipo."
-                                                    + " Aperte ENTER para voltar ao MENU.");
+                            entradaUsuario.entDados("""
+                                                    
+                                                            Veiculo de Passeio cadastrado anteriormente foi o ultimo a ser adicionado.
+                                                            O Vetor de Veiculos de Passeio esta cheio. Aperte ENTER para voltar ao MENU.
+                                                    
+                                                    """);
                             break;
                         }                        
                     }   break;
@@ -109,7 +112,7 @@ public class Teste {
                             break;
                         }
                         
-                        String mensagem = MessageFormat.format("Veiculo de Passeio cadastrado com Sucesso na posicao {0}. Aperte ENTER.", i);
+                        String mensagem = MessageFormat.format("Veiculo de Carga cadastrado com Sucesso na posicao {0}. Aperte ENTER.", i);
                         entradaUsuario.entDados(mensagem);
                         
                         if (!(checaVetor(2) == -1))
@@ -121,9 +124,12 @@ public class Teste {
                         }
                         else
                         {
-                            entradaUsuario.entDados("\nO Vetor de Veiculos de Carga esta cheio. "
-                                                    + "Nao ha possbilidade de adicionar outro veiculo desse tipo."
-                                                    + " Aperte ENTER para voltar ao MENU.");
+                            entradaUsuario.entDados("""
+                                                    
+                                                            Veiculo de Carga cadastrado anteriormente foi o ultimo a ser adicionado.
+                                                            O Vetor de Veiculos de Carga esta cheio. Aperte ENTER para voltar ao MENU.
+                                                    
+                                                    """);
                             break;
                         }                        
                     }   break;
@@ -133,12 +139,19 @@ public class Teste {
                     System.out.println("Todos Veiculos de Passeio");
                     System.out.println("--------------------------------------");
                     
+                    boolean temPasseio = false;
+                    
                     for (Passeio passeioElem : passeio) {
                         if (passeioElem != null)
                         {
                             impPasseio(passeioElem);
+                            temPasseio = true;
                         }
                     }
+                    
+                    if(!temPasseio)
+                        entradaUsuario.entDados("\nNao ha veiculos de passeio cadastrado. Aperte ENTER.");
+                    
                     break;
                     
                 case 4:
@@ -146,12 +159,19 @@ public class Teste {
                     System.out.println("Todos Veiculos de Carga");
                     System.out.println("--------------------------------------");
                     
+                    boolean temCarga = false;
+                    
                     for (Carga cargaElem : carga) {
                         if (cargaElem != null)
                         {
                             impCarga(cargaElem);
+                            temCarga = true;
                         }
                     }
+                    
+                    if(!temCarga)
+                        entradaUsuario.entDados("\nNao ha veiculos de carga cadastrado. Aperte ENTER.");
+                    
                     break;
                     
                 case 5:      
