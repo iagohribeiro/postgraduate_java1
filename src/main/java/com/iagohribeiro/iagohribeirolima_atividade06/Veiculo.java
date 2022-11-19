@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.iagohribeiro.iagohribeirolima_atividade04;
+package com.iagohribeiro.iagohribeirolima_atividade06;
 
 /**
  *
@@ -76,7 +76,11 @@ public abstract class Veiculo {
         return velocMax;
     }
 
-    final public void setVelocMax(float velocMax) {
+    final public void setVelocMax(float velocMax) throws VelocException{
+        
+        if (velocMax<80 || velocMax>110)
+            throw new VelocException();
+        
         this.velocMax = velocMax;
     }
 

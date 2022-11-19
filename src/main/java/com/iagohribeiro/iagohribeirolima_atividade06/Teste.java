@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
  */
 
-package com.iagohribeiro.iagohribeirolima_atividade04;
+package com.iagohribeiro.iagohribeirolima_atividade06;
 
 import java.text.MessageFormat;
 
@@ -16,13 +16,10 @@ public class Teste {
     private static Passeio newVeiculoPasseio = new Passeio();
     private static Carga newVeiculoCarga = new Carga();
     
-    private static Carga[] carga = new Carga[5];
-    private static Passeio[] passeio = new Passeio[5];
+    private static final BDVeiculos veiculos = new BDVeiculos();
     
-    private static Leitura entradaUsuario = new Leitura();
+    private static final Leitura entradaUsuario = new Leitura();
     
-    private static boolean retornaMenu = false;
-
     public static void main(String[] args) {
         
         boolean executando = true;
@@ -53,7 +50,7 @@ public class Teste {
             
             switch (escolha) {
                 case 1:
-                    for(int i=checaVetor(1); i<passeio.length; i++)
+                    for(int i=checaVetor(1); i<veiculos.getTamanhoListaPasseio(); i++)
                     {
                         if(i == -1)
                         {
@@ -62,12 +59,12 @@ public class Teste {
                         }
                         
                         newVeiculoPasseio = new Passeio();
-                        passeio[i] = preenchePasseio(newVeiculoPasseio);
                         
-                        if (retornaMenu)
+                        try{
+                            veiculos.setPasseio(preenchePasseio(newVeiculoPasseio), i);
+                        }
+                        catch (VeicExistException e)
                         {
-                            retornaMenu = false;
-                            passeio[i] = null;
                             break;
                         }
                         
@@ -94,7 +91,7 @@ public class Teste {
                     }   break;
                     
                 case 2:
-                    for(int i=checaVetor(2); i<carga.length; i++)
+                    for(int i=checaVetor(2); i<veiculos.getTamanhoListaCarga(); i++)
                     {
                         if(i == -1)
                         {
@@ -103,12 +100,11 @@ public class Teste {
                         }
                         
                         newVeiculoCarga = new Carga();
-                        carga[i] = preencheCarga(newVeiculoCarga);
-                        
-                        if (retornaMenu)
+                        try{
+                            veiculos.setCarga(preencheCarga(newVeiculoCarga), i);
+                        }
+                        catch (VeicExistException e)
                         {
-                            retornaMenu = false;
-                            carga[i] = null;
                             break;
                         }
                         
@@ -141,7 +137,7 @@ public class Teste {
                     
                     boolean temPasseio = false;
                     
-                    for (Passeio passeioElem : passeio) {
+                    for (Passeio passeioElem : veiculos.getPasseio()) {
                         if (passeioElem != null)
                         {
                             impPasseio(passeioElem);
@@ -161,7 +157,7 @@ public class Teste {
                     
                     boolean temCarga = false;
                     
-                    for (Carga cargaElem : carga) {
+                    for (Carga cargaElem : veiculos.getCarga()) {
                         if (cargaElem != null)
                         {
                             impCarga(cargaElem);
@@ -179,7 +175,7 @@ public class Teste {
                     boolean temPlacaPasseio = false;
                     
                     //Verifica se existe e imprime o veiculo a partir da placa fornecida
-                    for (Passeio passeioElem : passeio) {
+                    for (Passeio passeioElem : veiculos.getPasseio()) {
                         if (passeioElem!= null)
                         {
                             if (passeioElem.getPlaca().toLowerCase().equals(placa.toLowerCase()))
@@ -200,7 +196,7 @@ public class Teste {
                     String placaCarga = entradaUsuario.entDados("Digite a placa do Veiculo de Carga.");
                     boolean temPlaca = false;
                     //Verifica se existe e imprime o veiculo a partir da placa fornecida
-                    for (Carga cargaElem : carga) {
+                    for (Carga cargaElem : veiculos.getCarga()) {
                         if (cargaElem != null)
                         {
                             if (cargaElem.getPlaca().toLowerCase().equals(placaCarga.toLowerCase()))
@@ -231,29 +227,7 @@ public class Teste {
     //Metodo para verificar os vetores 
     public static int checaVetor (int opcaoMenu)
     {
-        /*Se for a opcao 1 do menu, o vertor passeio sera analisado.
-           Caso contrario, sera o de carga*/
-        if(opcaoMenu == 1)
-        {
-            for(int i=0; i<passeio.length; i++)
-            {
-                if(passeio[i] == null)
-                {
-                    return i;
-                }
-            }
-        }
-        else
-        {
-            for(int i=0; i<carga.length; i++)
-            {
-                if(carga[i] == null)
-                {
-                    return i;
-                }
-            }
-        }
-        return -1;
+        return veiculos.verificaListas(opcaoMenu);
     }
     
     //Metodo para preencher o objeto de pasaseio
@@ -268,20 +242,21 @@ public class Teste {
         veiculo.setModelo(entradaUsuario.entDados("Modelo..............:"));
         veiculo.setCor(entradaUsuario.entDados("Cor..............:"));
         veiculo.setQtdRodas(Integer.parseInt(entradaUsuario.entDados("Quantidade de Rodas..:")));
-        veiculo.setVelocMax(Integer.parseInt(entradaUsuario.entDados("Velocidade Maxima.:")));
+        
+        try{
+            veiculo.setVelocMax(Integer.parseInt(entradaUsuario.entDados("Velocidade Maxima.:")));
+        }
+        catch(VelocException e)
+        {
+            try
+            {
+                veiculo.setVelocMax(100f);
+            }
+            catch(VelocException ez){}
+        }
+        
         veiculo.getMotor().setQtdPist(Integer.parseInt(entradaUsuario.entDados("Quantidade Pistoes do motor.:")));
         veiculo.getMotor().setPotencia(Integer.parseInt(entradaUsuario.entDados("Potencia do motor..:")));
-        
-        for (Passeio passeioElem : passeio) {
-            if (passeioElem!= null)
-            {
-                if (passeioElem.getPlaca().toLowerCase().equals(veiculo.getPlaca().toLowerCase())) {
-                    System.out.println(MessageFormat.format("\n\n\nJa foi cadastrado um Veiculo com mesma placa {0}\n\n\n",veiculo.getPlaca()));
-                    retornaMenu = true;
-                }
-                break;
-            }
-        }
         
         return veiculo;
     }
@@ -289,7 +264,7 @@ public class Teste {
     //Metodo para imprimir objetos de veiculos de passeio
     public static void impPasseio(Passeio passeio){
         System.out.println("----------------------------------------");
-        System.out.println("Placa..: "+ passeio. getPlaca());
+        System.out.println("Placa..: "+ passeio.getPlaca());
         System.out.println("Marca........: "+ passeio.getMarca());
         System.out.println("Modelo...................: "+ passeio.getModelo());
         System.out.println("Cor..................: "+ passeio.getCor());
@@ -316,27 +291,29 @@ public class Teste {
         veiculo.setModelo(entradaUsuario.entDados("Modelo..............:"));
         veiculo.setCor(entradaUsuario.entDados("Cor..............:"));
         veiculo.setQtdRodas(Integer.parseInt(entradaUsuario.entDados("Quantidade de Rodas..:")));
-        veiculo.setVelocMax(Integer.parseInt(entradaUsuario.entDados("Velocidade Maxima.:")));
+        
+        try{
+            veiculo.setVelocMax(Integer.parseInt(entradaUsuario.entDados("Velocidade Maxima.:")));
+        }
+        catch(VelocException e)
+        {
+            try
+            {
+                veiculo.setVelocMax(90f);
+            }
+            catch(VelocException ez){}
+        }
+        
         veiculo.getMotor().setQtdPist(Integer.parseInt(entradaUsuario.entDados("Quantidade Pistoes do motor.:")));
         veiculo.getMotor().setPotencia(Integer.parseInt(entradaUsuario.entDados("Potencia do motor..:")));
         
-        for (Carga cargaElem : carga) {
-            if (cargaElem!= null)
-            {
-                if (cargaElem.getPlaca().toLowerCase().equals(veiculo.getPlaca().toLowerCase())) {
-                    System.out.println(MessageFormat.format("\n\n\nJa foi cadastrado um Veiculo com mesma placa {0}\n\n\n",veiculo.getPlaca()));
-                    retornaMenu = true;
-                }
-                break;
-            }
-        }
         return veiculo;
     }
     
     //Metodo para imprimir objetos de veiculos de carga
     public static void impCarga(Carga carga){
         System.out.println("----------------------------------------");
-        System.out.println("Placa..: "+ carga. getPlaca());
+        System.out.println("Placa..: "+ carga.getPlaca());
         System.out.println("Marca........: "+ carga.getMarca());
         System.out.println("Modelo...................: "+ carga.getModelo());
         System.out.println("Cor..................: "+ carga.getCor());
