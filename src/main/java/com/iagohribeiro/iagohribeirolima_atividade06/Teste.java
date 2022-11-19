@@ -20,7 +20,7 @@ public class Teste {
     
     private static final Leitura entradaUsuario = new Leitura();
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws VeicExistException, VelocException{
         
         boolean executando = true;
         int escolha = 0;
@@ -231,7 +231,7 @@ public class Teste {
     }
     
     //Metodo para preencher o objeto de pasaseio
-    public static Passeio preenchePasseio(Passeio veiculo)
+    public static Passeio preenchePasseio(Passeio veiculo) throws VelocException
     {
         System.out.println("\n\n--------------------------------------");
         System.out.println("Cadastro de Veiculos de Passeio");
@@ -244,15 +244,11 @@ public class Teste {
         veiculo.setQtdRodas(Integer.parseInt(entradaUsuario.entDados("Quantidade de Rodas..:")));
         
         try{
-            veiculo.setVelocMax(Integer.parseInt(entradaUsuario.entDados("Velocidade Maxima.:")));
+            veiculo.setVelocMax(Float.parseFloat(entradaUsuario.entDados("Velocidade Maxima.:")));
         }
         catch(VelocException e)
         {
-            try
-            {
-                veiculo.setVelocMax(100f);
-            }
-            catch(VelocException ez){}
+            veiculo.setVelocMax(100f);
         }
         
         veiculo.getMotor().setQtdPist(Integer.parseInt(entradaUsuario.entDados("Quantidade Pistoes do motor.:")));
@@ -279,7 +275,7 @@ public class Teste {
     }
     
     //Metodo para preencher o objeto de carga
-    public static Carga preencheCarga(Carga veiculo)
+    public static Carga preencheCarga(Carga veiculo) throws VelocException
     {
         System.out.println("\n\n--------------------------------------");
         System.out.println("Cadastro de Veiculos de Carga");
@@ -293,15 +289,11 @@ public class Teste {
         veiculo.setQtdRodas(Integer.parseInt(entradaUsuario.entDados("Quantidade de Rodas..:")));
         
         try{
-            veiculo.setVelocMax(Integer.parseInt(entradaUsuario.entDados("Velocidade Maxima.:")));
+            veiculo.setVelocMax(Float.parseFloat(entradaUsuario.entDados("Velocidade Maxima.:")));
         }
         catch(VelocException e)
         {
-            try
-            {
-                veiculo.setVelocMax(90f);
-            }
-            catch(VelocException ez){}
+            veiculo.setVelocMax(90f);
         }
         
         veiculo.getMotor().setQtdPist(Integer.parseInt(entradaUsuario.entDados("Quantidade Pistoes do motor.:")));
