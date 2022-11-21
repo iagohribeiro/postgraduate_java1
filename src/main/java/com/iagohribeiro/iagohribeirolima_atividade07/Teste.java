@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
  */
 
-package com.iagohribeiro.iagohribeirolima_atividade06;
+package com.iagohribeiro.iagohribeirolima_atividade07;
 
 import java.text.MessageFormat;
 
@@ -35,7 +35,9 @@ public class Teste {
                            \t\t\t\t4. Imprimir Todos os Veiculos de Carga
                            \t\t\t\t5. Imprimir Veiculo de Passeio pela Placa
                            \t\t\t\t6. Imprimir Veiculo de Carga pela Placa
-                           \t\t\t\t7. Sair do Sistema
+                           \t\t\t\t7. Excluir Veiculo de Passeio pela Placa
+                           \t\t\t\t8. Excluir Veiculo de Carga pela Placa
+                           \t\t\t\t9. Sair do Sistema
                            """);
             try{
                 escolha = Integer.parseInt(entradaUsuario.entDados("\nEscolha uma opcao do Menu:"));
@@ -50,86 +52,48 @@ public class Teste {
             
             switch (escolha) {
                 case 1:
-                    for(int i=checaVetor(1); i<veiculos.getTamanhoListaPasseio(); i++)
+                    while (true)
                     {
-                        if(i == -1)
-                        {
-                            entradaUsuario.entDados("O Vetor de Veiculos de Passeio esta cheio. Aperte ENTER para voltar ao MENU.");
-                            break;
-                        }
-                        
                         newVeiculoPasseio = new Passeio();
-                        
+
                         try{
-                            veiculos.setPasseio(preenchePasseio(newVeiculoPasseio), i);
+                            veiculos.setPasseio(preenchePasseio(newVeiculoPasseio));
                         }
                         catch (VeicExistException e)
                         {
                             break;
                         }
-                        
-                        String mensagem = MessageFormat.format("Veiculo de Passeio cadastrado com Sucesso na posicao {0}. Aperte ENTER.", i);
-                        entradaUsuario.entDados(mensagem);
-                        
-                        if (!(checaVetor(1) == -1))
-                        {
-                            String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Passeio? <sim/nao>");
-                            
-                            if(retorno.toLowerCase().equals("nao".toLowerCase()) || !retorno.toLowerCase().equals("sim".toLowerCase()))
-                                break;
-                        }
-                        else
-                        {
-                            entradaUsuario.entDados("""
-                                                    
-                                                            Veiculo de Passeio cadastrado anteriormente foi o ultimo a ser adicionado.
-                                                            O Vetor de Veiculos de Passeio esta cheio. Aperte ENTER para voltar ao MENU.
-                                                    
-                                                    """);
+
+                        entradaUsuario.entDados("Veiculo de Passeio cadastrado com Sucesso. Aperte ENTER.");
+
+
+                        String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Passeio? <sim/nao>");
+
+                        if(retorno.toLowerCase().equals("nao".toLowerCase()) || !retorno.toLowerCase().equals("sim".toLowerCase()))
                             break;
-                        }                        
-                    }   break;
-                    
+                    }
+                    break;
                 case 2:
-                    for(int i=checaVetor(2); i<veiculos.getTamanhoListaCarga(); i++)
+                    while (true)
                     {
-                        if(i == -1)
-                        {
-                            entradaUsuario.entDados("O Vetor de Veiculos de Carga esta cheio. Aperte ENTER para voltar ao MENU.");
-                            break;
-                        }
-                        
                         newVeiculoCarga = new Carga();
                         try{
-                            veiculos.setCarga(preencheCarga(newVeiculoCarga), i);
+                            veiculos.setCarga(preencheCarga(newVeiculoCarga));
                         }
                         catch (VeicExistException e)
                         {
                             break;
                         }
-                        
-                        String mensagem = MessageFormat.format("Veiculo de Carga cadastrado com Sucesso na posicao {0}. Aperte ENTER.", i);
-                        entradaUsuario.entDados(mensagem);
-                        
-                        if (!(checaVetor(2) == -1))
-                        {
-                            String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Carga? <sim/nao>");
-                            
-                            if(retorno.toLowerCase().equals("nao".toLowerCase()) || !retorno.toLowerCase().equals("sim".toLowerCase()))
-                                break;
-                        }
-                        else
-                        {
-                            entradaUsuario.entDados("""
-                                                    
-                                                            Veiculo de Carga cadastrado anteriormente foi o ultimo a ser adicionado.
-                                                            O Vetor de Veiculos de Carga esta cheio. Aperte ENTER para voltar ao MENU.
-                                                    
-                                                    """);
+
+                        entradaUsuario.entDados("Veiculo de Carga cadastrado com Sucesso. Aperte ENTER.");
+
+
+                        String retornoCarga = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Carga? <sim/nao>");
+
+                        if(retornoCarga.toLowerCase().equals("nao".toLowerCase()) || !retornoCarga.toLowerCase().equals("sim".toLowerCase()))
                             break;
-                        }                        
-                    }   break;
-                    
+                    }
+                    break;
                 case 3:
                     System.out.println("\n\n--------------------------------------");
                     System.out.println("Todos Veiculos de Passeio");
@@ -149,7 +113,6 @@ public class Teste {
                         entradaUsuario.entDados("\nNao ha veiculos de passeio cadastrado. Aperte ENTER.");
                     
                     break;
-                    
                 case 4:
                     System.out.println("\n\n--------------------------------------");
                     System.out.println("Todos Veiculos de Carga");
@@ -169,7 +132,6 @@ public class Teste {
                         entradaUsuario.entDados("\nNao ha veiculos de carga cadastrado. Aperte ENTER.");
                     
                     break;
-                    
                 case 5:      
                     String placa = entradaUsuario.entDados("Digite a placa do Veiculo de Passeio.");
                     boolean temPlacaPasseio = false;
@@ -191,7 +153,6 @@ public class Teste {
                         System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
                     
                     break;
-                    
                 case 6:      
                     String placaCarga = entradaUsuario.entDados("Digite a placa do Veiculo de Carga.");
                     boolean temPlaca = false;
@@ -212,22 +173,54 @@ public class Teste {
                         System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
                     
                     break;
-                    
                 case 7:
+                    String placaPasseioExcluir = entradaUsuario.entDados("Digite a placa do Veiculo de Passeio.");
+                    boolean existePlacaPasseio = false;
+                    
+                    for (Passeio passeioElem : veiculos.getPasseio()) {
+                        if (passeioElem!= null)
+                        {
+                            if (passeioElem.getPlaca().toLowerCase().equals(placaPasseioExcluir.toLowerCase()))
+                            {
+                                veiculos.excluiPasseio(passeioElem);
+                                existePlacaPasseio = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (!existePlacaPasseio)
+                        System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
+                    
+                    break;
+                case 8:
+                    String placaCargaExcluir = entradaUsuario.entDados("Digite a placa do Veiculo de Carga.");
+                    boolean existePlacaCarga = false;
+                    //Verifica se existe e imprime o veiculo a partir da placa fornecida
+                    for (Carga cargaElem : veiculos.getCarga()) {
+                        if (cargaElem != null)
+                        {
+                            if (cargaElem.getPlaca().toLowerCase().equals(placaCargaExcluir.toLowerCase()))
+                            {
+                                veiculos.excluiCarga(cargaElem);
+                                existePlacaCarga = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (!existePlacaCarga)
+                        System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
+                    
+                    break;
+                case 9:
                     executando = false;
                     break;
-                    
                 default:
-                    System.out.println("\nPor favor digite um número entre 1 e 7\n");
+                    System.out.println("\nPor favor digite um número entre 1 e 9\n");
                     break;
             }  
         }
-    }
-    
-    //Metodo para verificar os vetores 
-    public static int checaVetor (int opcaoMenu)
-    {
-        return veiculos.verificaListas(opcaoMenu);
     }
     
     //Metodo para preencher o objeto de pasaseio
