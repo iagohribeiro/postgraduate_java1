@@ -3,16 +3,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
  */
 
-package com.iagohribeiro.iagohribeirolima_atividade07;
+package com.iagohribeiro.iagohribeirolima_atividade08;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.MessageFormat;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 /**
  *
  * @author iagohribeiro
  */
-public class Teste {
+public class Teste implements ActionListener {
     
+    private static Teste testeClass = new Teste();
     private static Passeio newVeiculoPasseio = new Passeio();
     private static Carga newVeiculoCarga = new Carga();
     
@@ -20,14 +28,40 @@ public class Teste {
     
     private static final Leitura entradaUsuario = new Leitura();
     
+    
+    //JFrame Elements
+    private static int larg = 300, alt =250;
+    private static JFrame janelaPrincipal = new JFrame("Gestao de Veiculos");
+    private static JFrame janelaVeiculoPasseio = new JFrame("");
+    private static JFrame janelaVeiculoCarga = new JFrame("");
+    private static JFrame janelaCadastros = new JFrame("");
+    private static JFrame janelaConsultaExcluiVeiculos = new JFrame("");
+    private static JFrame janelaImprimeExcluiVeiculos = new JFrame("");
+    
+    //JButton Elements
+    private static JButton btPasseio = new JButton("Passeio");
+    private static JButton btCarga = new JButton("Carga");
+    
+    private static JButton btCadastrarPasseio = new JButton("Cadastrar");
+    private static JButton btConsultarPasseio = new JButton("Consultar / Excluir pela placa");
+    private static JButton btImprimirPasseio = new JButton("Imprimir / Excluir Todos");
+    private static JButton btSairPasseio = new JButton("Sair");
+    
+    private static JButton btCadastrarCarga = new JButton("Cadastrar");
+    private static JButton btConsultarCarga = new JButton("Consultar / Excluir pela placa");
+    private static JButton btImprimirCarga = new JButton("Imprimir / Excluir Todos");
+    private static JButton btSairCarga = new JButton("Sair");
+    
+    
     public static void main(String[] args) throws VeicExistException, VelocException{
         
         boolean executando = true;
         int escolha = 0;
+        carregaJanelaPrincipal();
         
         while (executando){
             
-            System.out.println("""
+            /*System.out.println("""
                            \t\t\tSistema de Gestao de Veiculos - Menu Inicial\n
                            \t\t\t\t1. Cadastrar Veiculo de Passeio
                            \t\t\t\t2. Cadastrar Veiculo de Carga
@@ -219,7 +253,7 @@ public class Teste {
                 default:
                     System.out.println("\nPor favor digite um número entre 1 e 9\n");
                     break;
-            }  
+            } */ 
         }
     }
     
@@ -311,5 +345,120 @@ public class Teste {
         System.out.println("Qtd. total atributos Numericos....: "+ carga.calcular());
         System.out.println("Calc Vel Maxima em cetimetro/hour: " + carga.calcVel(carga.getVelocMax()));
         System.out.println("----------------------------------------\n");
+    }
+    
+    //Carrega todas Janelas do Software
+    public static void carregaJanelaPrincipal() {
+        //Janela Principal
+        janelaPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        janelaPrincipal.setLayout(new GridLayout(2,1,10,10));
+        janelaPrincipal.setSize(larg,alt);
+        janelaPrincipal.getContentPane().setBackground(Color.WHITE);
+        
+        janelaPrincipal.add(btPasseio);
+        btPasseio.setMnemonic('P');
+        btPasseio.setBackground(new Color(0, 162, 232));
+        btPasseio.addActionListener(testeClass);
+        btPasseio.setOpaque(true);
+        btPasseio.setBorderPainted(false);
+        
+        janelaPrincipal.add(btCarga);
+        btCarga.setMnemonic('C');
+        btCarga.setBackground(new Color(34, 177, 75));
+        btCarga.addActionListener(testeClass);
+        btCarga.setOpaque(true);
+        btCarga.setBorderPainted(false);
+
+
+        janelaPrincipal.setVisible(true);
+        
+    }
+    public static void carregaVeiculoPasseio() {
+        
+        //Janela Veiculos passeio
+        janelaVeiculoPasseio.setLayout(new GridLayout(4,1,10,10));
+        janelaVeiculoPasseio.setTitle("Veiculos de Passeio");
+        janelaVeiculoPasseio.setSize(larg,alt);
+        janelaVeiculoPasseio.getContentPane().setBackground(Color.WHITE);
+        
+        janelaVeiculoPasseio.add(btCadastrarPasseio);
+        btCadastrarPasseio.setBackground(new Color(0, 162, 232));
+        btCadastrarPasseio.addActionListener(testeClass);
+        btCadastrarPasseio.setOpaque(true);
+        btCadastrarPasseio.setBorderPainted(false);
+        
+        janelaVeiculoPasseio.add(btConsultarPasseio);
+        btConsultarPasseio.setBackground(new Color(0, 162, 232));
+        btConsultarPasseio.addActionListener(testeClass);
+        btConsultarPasseio.setOpaque(true);
+        btConsultarPasseio.setBorderPainted(false);
+        
+        janelaVeiculoPasseio.add(btImprimirPasseio);
+        btImprimirPasseio.setBackground(new Color(0, 162, 232));
+        btImprimirPasseio.addActionListener(testeClass);
+        btImprimirPasseio.setOpaque(true);
+        btImprimirPasseio.setBorderPainted(false);
+        
+        janelaVeiculoPasseio.add(btSairPasseio);
+        btSairPasseio.setBackground(new Color(237, 28, 36));
+        btSairPasseio.addActionListener(testeClass);
+        btSairPasseio.setOpaque(true);
+        btSairPasseio.setBorderPainted(false);
+
+        janelaVeiculoPasseio.setVisible(true);
+        
+    }
+    
+    public static void carregaVeiculoCarga() {
+        
+        //Janela Veiculos passeio
+        janelaVeiculoCarga.setLayout(new GridLayout(4,1,10,10));
+        janelaVeiculoCarga.setTitle("Veiculos de Carga");
+        janelaVeiculoCarga.setSize(larg,alt);
+        janelaVeiculoCarga.getContentPane().setBackground(Color.WHITE);
+        
+        janelaVeiculoCarga.add(btCadastrarCarga);
+        btCadastrarCarga.setBackground(new Color(34, 177, 75));
+        btCadastrarCarga.addActionListener(testeClass);
+        btCadastrarCarga.setOpaque(true);
+        btCadastrarCarga.setBorderPainted(false);
+        
+        janelaVeiculoCarga.add(btConsultarCarga);
+        btConsultarCarga.setBackground(new Color(34, 177, 75));
+        btConsultarCarga.addActionListener(testeClass);
+        btConsultarCarga.setOpaque(true);
+        btConsultarCarga.setBorderPainted(false);
+        
+        janelaVeiculoCarga.add(btImprimirCarga);
+        btImprimirCarga.setBackground(new Color(34, 177, 75));
+        btImprimirCarga.addActionListener(testeClass);
+        btImprimirCarga.setOpaque(true);
+        btImprimirCarga.setBorderPainted(false);
+        
+        janelaVeiculoCarga.add(btSairCarga);
+        btSairCarga.setBackground(new Color(237, 28, 36));
+        btSairCarga.addActionListener(testeClass);
+        btSairCarga.setOpaque(true);
+        btSairCarga.setBorderPainted(false);
+
+        janelaVeiculoCarga.setVisible(true);
+        
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        
+        if(e.getSource().equals(btPasseio)){
+            carregaVeiculoPasseio();
+        }
+        else if(e.getSource().equals(btCarga)){
+            carregaVeiculoCarga();
+        }
+        else if(e.getSource().equals(btSairPasseio)){
+            janelaVeiculoPasseio.dispose();
+        }
+        else if(e.getSource().equals(btSairCarga)){
+            janelaVeiculoCarga.dispose();
+        }
     }
 }
