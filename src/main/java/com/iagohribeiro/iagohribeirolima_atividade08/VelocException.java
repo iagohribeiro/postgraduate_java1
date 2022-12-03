@@ -4,6 +4,9 @@
  */
 package com.iagohribeiro.iagohribeirolima_atividade08;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author iagohribeiro
@@ -11,6 +14,9 @@ package com.iagohribeiro.iagohribeirolima_atividade08;
 public class VelocException extends Exception {
 
     public VelocException() {
-        System.out.println("A velocidade máxima está fora dos limites brasileiros");
+        JOptionPane.showMessageDialog(new JFrame(),
+        "A velocidade máxima está fora dos limites brasileiros.",
+        "Wrning",
+        JOptionPane.WARNING_MESSAGE);
     }
 }

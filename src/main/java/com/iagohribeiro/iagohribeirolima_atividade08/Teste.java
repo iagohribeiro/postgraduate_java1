@@ -7,12 +7,18 @@ package com.iagohribeiro.iagohribeirolima_atividade08;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.MessageFormat;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -28,13 +34,13 @@ public class Teste implements ActionListener {
     
     private static final Leitura entradaUsuario = new Leitura();
     
-    
     //JFrame Elements
     private static int larg = 300, alt =250;
     private static JFrame janelaPrincipal = new JFrame("Gestao de Veiculos");
     private static JFrame janelaVeiculoPasseio = new JFrame("");
     private static JFrame janelaVeiculoCarga = new JFrame("");
-    private static JFrame janelaCadastros = new JFrame("");
+    private static JFrame janelaCadastroCarga;
+    private static JFrame janelaCadastroPasseio;
     private static JFrame janelaConsultaExcluiVeiculos = new JFrame("");
     private static JFrame janelaImprimeExcluiVeiculos = new JFrame("");
     
@@ -52,6 +58,28 @@ public class Teste implements ActionListener {
     private static JButton btImprimirCarga = new JButton("Imprimir / Excluir Todos");
     private static JButton btSairCarga = new JButton("Sair");
     
+    private static JButton btCadastrarNewCarga = new JButton("Cadastrar");
+    private static JButton btLimparCarga = new JButton("Limpar");
+    private static JButton btNovoCarga = new JButton("Novo");
+    private static JButton btSairTelaCadastarCarga = new JButton("Sair");
+    
+    private static JButton btCadastrarNewPasseio= new JButton("Cadastrar");
+    private static JButton btLimparPasseio = new JButton("Limpar");
+    private static JButton btNovoPasseio = new JButton("Novo");
+    private static JButton btSairTelaCadastarPasseio = new JButton("Sair");
+    
+    //JTextFields
+    private static JTextField taraTexto = new JTextField();
+    private static JTextField cargaMaxTexto = new JTextField();
+    private static JTextField placaTexto = new JTextField();
+    private static JTextField marcaTexto = new JTextField();
+    private static JTextField modeloTexto = new JTextField();
+    private static JTextField corTexto = new JTextField();
+    private static JTextField qtdRodasTexto = new JTextField();
+    private static JTextField velocidadeMaxTexto = new JTextField();
+    private static JTextField qtdPistoesTexto = new JTextField();
+    private static JTextField potenciaTexto = new JTextField();
+    private static JTextField qtdPassageiroTexto = new JTextField();
     
     public static void main(String[] args) throws VeicExistException, VelocException{
         
@@ -258,30 +286,72 @@ public class Teste implements ActionListener {
     }
     
     //Metodo para preencher o objeto de pasaseio
-    public static Passeio preenchePasseio(Passeio veiculo) throws VelocException
+    public static Passeio preenchePasseio(Passeio veiculo)
     {
-        System.out.println("\n\n--------------------------------------");
-        System.out.println("Cadastro de Veiculos de Passeio");
-        System.out.println("--------------------------------------");
-        veiculo.setQtdPassageiros(Integer.parseInt(entradaUsuario.entDados("Quantidade de Passageiros.:")));
-        veiculo.setPlaca(entradaUsuario.entDados("\nPlaca............:"));              
-        veiculo.setMarca(entradaUsuario.entDados("Marca............:"));
-        veiculo.setModelo(entradaUsuario.entDados("Modelo..............:"));
-        veiculo.setCor(entradaUsuario.entDados("Cor..............:"));
-        veiculo.setQtdRodas(Integer.parseInt(entradaUsuario.entDados("Quantidade de Rodas..:")));
-        
         try{
-            veiculo.setVelocMax(Float.parseFloat(entradaUsuario.entDados("Velocidade Maxima.:")));
+            veiculo.setQtdPassageiros(Integer.parseInt(qtdPassageiroTexto.getText()));
+            veiculo.setPlaca(placaTexto.getText());              
+            veiculo.setMarca(marcaTexto.getText());
+            veiculo.setModelo(modeloTexto.getText());
+            veiculo.setCor(corTexto.getText());
+            veiculo.setQtdRodas(Integer.parseInt(qtdRodasTexto.getText()));
+
+            try{
+                veiculo.setVelocMax(Float.parseFloat(velocidadeMaxTexto.getText()));
+            }
+            catch(VelocException e)
+            {
+                try{
+                    veiculo.setVelocMax(100f);
+                }
+                catch(VelocException exception){}
+            }
+
+            veiculo.getMotor().setQtdPist(Integer.parseInt(qtdPistoesTexto.getText()));
+            veiculo.getMotor().setPotencia(Integer.parseInt(potenciaTexto.getText()));
         }
-        catch(VelocException e)
-        {
-            veiculo.setVelocMax(100f);
+        catch(NumberFormatException exception){
+            JOptionPane.showMessageDialog(new JFrame(),
+            "Erro de Conversão. O veiculo não foi registrado.",
+            "Erro",
+            JOptionPane.ERROR_MESSAGE);
         }
-        
-        veiculo.getMotor().setQtdPist(Integer.parseInt(entradaUsuario.entDados("Quantidade Pistoes do motor.:")));
-        veiculo.getMotor().setPotencia(Integer.parseInt(entradaUsuario.entDados("Potencia do motor..:")));
         
         return veiculo;
+    }
+    
+    public static void cadastraVeiculoPasseio()
+    {
+        newVeiculoPasseio = new Passeio();
+        
+        try{
+            veiculos.setPasseio(preenchePasseio(newVeiculoPasseio));
+            //Custom button text
+            Object[] options = {"Sim",
+                                "Nao"};
+            int retornoCarga = JOptionPane.showOptionDialog(new JFrame(),
+                "Veiculo de Passeio cadastrado com Sucesso. "
+                + "Deseja cadastrar outro Veiculo de Passeio?",
+                "Cadastro de novo Veiculo de Passeio",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+
+            System.out.println(retornoCarga);
+            
+            if(retornoCarga == 1)
+            {
+                cleanTextFields();
+                janelaCadastroPasseio.dispose();
+            }
+          
+        }
+        catch (VeicExistException e)
+        {
+            janelaCadastroPasseio.dispose();
+        }
     }
     
     //Metodo para imprimir objetos de veiculos de passeio
@@ -302,31 +372,73 @@ public class Teste implements ActionListener {
     }
     
     //Metodo para preencher o objeto de carga
-    public static Carga preencheCarga(Carga veiculo) throws VelocException
+    public static Carga preencheCarga(Carga veiculo)
     {
-        System.out.println("\n\n--------------------------------------");
-        System.out.println("Cadastro de Veiculos de Carga");
-        System.out.println("--------------------------------------");
-        veiculo.setTara(Integer.parseInt(entradaUsuario.entDados("Tara.....:")));
-        veiculo.setCargaMax(Integer.parseInt(entradaUsuario.entDados("Carga Maxima.....:")));
-        veiculo.setPlaca(entradaUsuario.entDados("\nPlaca............:"));              
-        veiculo.setMarca(entradaUsuario.entDados("Marca............:"));
-        veiculo.setModelo(entradaUsuario.entDados("Modelo..............:"));
-        veiculo.setCor(entradaUsuario.entDados("Cor..............:"));
-        veiculo.setQtdRodas(Integer.parseInt(entradaUsuario.entDados("Quantidade de Rodas..:")));
-        
         try{
-            veiculo.setVelocMax(Float.parseFloat(entradaUsuario.entDados("Velocidade Maxima.:")));
+            veiculo.setTara(Integer.parseInt(taraTexto.getText()));
+            veiculo.setCargaMax(Integer.parseInt(cargaMaxTexto.getText()));
+            veiculo.setPlaca(placaTexto.getText());              
+            veiculo.setMarca(marcaTexto.getText());
+            veiculo.setModelo(modeloTexto.getText());
+            veiculo.setCor(corTexto.getText());
+            veiculo.setQtdRodas(Integer.parseInt(qtdRodasTexto.getText()));
+
+            try{
+                veiculo.setVelocMax(Float.parseFloat(velocidadeMaxTexto.getText()));
+            }
+            catch(VelocException e)
+            {
+                try{
+                    veiculo.setVelocMax(90f);
+                }
+                catch(VelocException exception){}
+            }
+
+            veiculo.getMotor().setQtdPist(Integer.parseInt(qtdPistoesTexto.getText()));
+            veiculo.getMotor().setPotencia(Integer.parseInt(potenciaTexto.getText()));
         }
-        catch(VelocException e)
-        {
-            veiculo.setVelocMax(90f);
+        catch(NumberFormatException exception){
+            JOptionPane.showMessageDialog(new JFrame(),
+            "Erro de Conversão. O veiculo não foi registrado.",
+            "Erro",
+            JOptionPane.ERROR_MESSAGE);
         }
-        
-        veiculo.getMotor().setQtdPist(Integer.parseInt(entradaUsuario.entDados("Quantidade Pistoes do motor.:")));
-        veiculo.getMotor().setPotencia(Integer.parseInt(entradaUsuario.entDados("Potencia do motor..:")));
         
         return veiculo;
+    }
+    
+    public static void cadastraVeiculoCarga()
+    {
+        newVeiculoCarga = new Carga();
+        
+        try{
+            veiculos.setCarga(preencheCarga(newVeiculoCarga));
+            //Custom button text
+            Object[] options = {"Sim",
+                                "Nao"};
+            int retornoCarga = JOptionPane.showOptionDialog(new JFrame(),
+                "Veiculo de Carga cadastrado com Sucesso. "
+                + "Deseja cadastrar outro Veiculo de Carga?",
+                "Cadastro de novo Veiculo de Carga",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
+
+            System.out.println(retornoCarga);
+            
+            if(retornoCarga == 1)
+            {
+                cleanTextFields();
+                janelaCadastroCarga.dispose();
+            }
+          
+        }
+        catch (VeicExistException e)
+        {
+            janelaCadastroCarga.dispose();
+        }
     }
     
     //Metodo para imprimir objetos de veiculos de carga
@@ -368,7 +480,6 @@ public class Teste implements ActionListener {
         btCarga.addActionListener(testeClass);
         btCarga.setOpaque(true);
         btCarga.setBorderPainted(false);
-
 
         janelaPrincipal.setVisible(true);
         
@@ -444,6 +555,410 @@ public class Teste implements ActionListener {
         janelaVeiculoCarga.setVisible(true);
         
     }
+    
+    public static void carregaCadastroCarga() {
+        janelaCadastroCarga = new JFrame("Cadastro de Carga");
+        janelaCadastroCarga.setLayout(new GridBagLayout());
+        janelaCadastroCarga.setSize(400,500);
+        janelaCadastroCarga.getContentPane().setBackground(new Color(230, 230, 230));
+        
+        GridBagConstraints contraints = new GridBagConstraints();
+        
+        JLabel tara = new JLabel("Tara: ");
+        JLabel cargaMax = new JLabel("Carga Max.: ");
+        JLabel placa = new JLabel("Placa: ");
+        JLabel marca = new JLabel("Marca: ");
+        JLabel modelo = new JLabel("Modelo: ");
+        JLabel cor = new JLabel("Cor: ");
+        JLabel qtdRodas = new JLabel("Qtd. Rodas: ");
+        JLabel velocidadeMax = new JLabel("Velocidade Max.:");
+        JLabel qtdPistoes = new JLabel("Qtd. Pistoes: ");
+        JLabel portencia = new JLabel("Potencia: ");
+        
+        cleanTextFields();
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 0;
+        contraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        janelaCadastroCarga.add(tara, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 0;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.FIRST_LINE_END;
+        janelaCadastroCarga.add(taraTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 1;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroCarga.add(cargaMax, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 1;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroCarga.add(cargaMaxTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 2;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroCarga.add(placa, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 2;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroCarga.add(placaTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 3;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroCarga.add(marca, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 3;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroCarga.add(marcaTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 4;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroCarga.add(modelo, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 4;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroCarga.add(modeloTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 5;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroCarga.add(cor, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 5;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroCarga.add(corTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 6;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroCarga.add(qtdRodas, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 6;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroCarga.add(qtdRodasTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 7;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroCarga.add(velocidadeMax, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 7;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroCarga.add(velocidadeMaxTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 8;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroCarga.add(qtdPistoes, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 8;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroCarga.add(qtdPistoesTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 9;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroCarga.add(portencia, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 9;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroCarga.add(potenciaTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btCadastrarNewCarga.addActionListener(testeClass);
+        janelaCadastroCarga.add(btCadastrarNewCarga, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 2;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btLimparCarga.addActionListener(testeClass);
+        janelaCadastroCarga.add(btLimparCarga, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 3;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btNovoCarga.addActionListener(testeClass);
+        janelaCadastroCarga.add(btNovoCarga, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 4;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btSairTelaCadastarCarga.setBackground(new Color(237, 28, 36));
+        btSairTelaCadastarCarga.addActionListener(testeClass);
+        janelaCadastroCarga.add(btSairTelaCadastarCarga, contraints);
+        
+        janelaCadastroCarga.setVisible(true); 
+    }
+    
+        public static void carregaCadastroPasseio() {
+        janelaCadastroPasseio = new JFrame("Cadastro de Passeio");
+        janelaCadastroPasseio.setLayout(new GridBagLayout());
+        janelaCadastroPasseio.setSize(400,500);
+        janelaCadastroPasseio.getContentPane().setBackground(new Color(230, 230, 230));
+        
+        GridBagConstraints contraints = new GridBagConstraints();
+        
+        JLabel qtdPassageiro = new JLabel("Qtd. Passageiros: ");
+        JLabel placa = new JLabel("Placa: ");
+        JLabel marca = new JLabel("Marca: ");
+        JLabel modelo = new JLabel("Modelo: ");
+        JLabel cor = new JLabel("Cor: ");
+        JLabel qtdRodas = new JLabel("Qtd. Rodas: ");
+        JLabel velocidadeMax = new JLabel("Velocidade Max.:");
+        JLabel qtdPistoes = new JLabel("Qtd. Pistoes: ");
+        JLabel portencia = new JLabel("Potencia: ");
+        
+        cleanTextFields();
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 0;
+        contraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        janelaCadastroPasseio.add(qtdPassageiro, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 0;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.FIRST_LINE_END;
+        janelaCadastroPasseio.add(qtdPassageiroTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 2;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroPasseio.add(placa, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 2;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroPasseio.add(placaTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 3;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroPasseio.add(marca, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 3;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroPasseio.add(marcaTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 4;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroPasseio.add(modelo, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 4;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroPasseio.add(modeloTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 5;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroPasseio.add(cor, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 5;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroPasseio.add(corTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 6;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroPasseio.add(qtdRodas, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 6;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroPasseio.add(qtdRodasTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 7;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroPasseio.add(velocidadeMax, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 7;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroPasseio.add(velocidadeMaxTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 8;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroPasseio.add(qtdPistoes, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 8;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroPasseio.add(qtdPistoesTexto, contraints);
+        
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 9;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaCadastroPasseio.add(portencia, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 9;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaCadastroPasseio.add(potenciaTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btCadastrarNewPasseio.addActionListener(testeClass);
+        janelaCadastroPasseio.add(btCadastrarNewPasseio, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 2;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btLimparPasseio.addActionListener(testeClass);
+        janelaCadastroPasseio.add(btLimparPasseio, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 3;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btNovoPasseio.addActionListener(testeClass);
+        janelaCadastroPasseio.add(btNovoPasseio, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 4;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btSairTelaCadastarPasseio.setBackground(new Color(237, 28, 36));
+        btSairTelaCadastarPasseio.addActionListener(testeClass);
+        janelaCadastroPasseio.add(btSairTelaCadastarPasseio, contraints);
+        
+        janelaCadastroPasseio.setVisible(true); 
+    }
+    
+    public static void cleanTextFields(){
+        taraTexto.setText("");
+        cargaMaxTexto.setText("");
+        placaTexto.setText("");
+        marcaTexto.setText("");
+        modeloTexto.setText("");
+        corTexto.setText("");
+        qtdRodasTexto.setText("");
+        velocidadeMaxTexto.setText("");
+        qtdPistoesTexto.setText("");
+        potenciaTexto.setText("");
+        qtdPassageiroTexto.setText("");
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -460,5 +975,27 @@ public class Teste implements ActionListener {
         else if(e.getSource().equals(btSairCarga)){
             janelaVeiculoCarga.dispose();
         }
+        else if(e.getSource().equals(btCadastrarCarga)){
+            carregaCadastroCarga();
+        }
+        else if(e.getSource().equals(btSairTelaCadastarCarga)){
+            janelaCadastroCarga.dispose();
+        }
+        else if(e.getSource().equals(btLimparCarga) || e.getSource().equals(btLimparPasseio)){
+            cleanTextFields();
+        }
+        else if(e.getSource().equals(btCadastrarNewCarga)){
+           cadastraVeiculoCarga();
+        }
+        else if(e.getSource().equals(btCadastrarPasseio)){
+            carregaCadastroPasseio();
+        }
+        else if(e.getSource().equals(btSairTelaCadastarPasseio)){
+            janelaCadastroPasseio.dispose();
+        }
+        else if(e.getSource().equals(btCadastrarNewPasseio)){
+           cadastraVeiculoPasseio();
+        }
+        
     }
 }
