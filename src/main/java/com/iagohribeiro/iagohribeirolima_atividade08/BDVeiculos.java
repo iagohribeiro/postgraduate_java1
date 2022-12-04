@@ -48,9 +48,19 @@ public class BDVeiculos {
         listaPasseio.remove(veiculo);
     }
     
+    public void excluiPasseioCompleto()
+    {
+        listaPasseio.clear();
+    }
+    
     public void excluiCarga(Carga veiculo)
     {
         listaCarga.remove(veiculo);
+    }
+    
+    public void excluiCargaCompleto()
+    {
+        listaCarga.clear();
     }
     
     public List<Passeio> getPasseio()

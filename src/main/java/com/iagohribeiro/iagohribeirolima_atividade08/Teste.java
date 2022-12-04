@@ -151,12 +151,12 @@ public class Teste implements ActionListener {
             veiculo.getMotor().setPotencia(Integer.parseInt(potenciaTexto.getText()));
         }
         catch(NumberFormatException exception){
+            cleanTextFields();
             JOptionPane.showMessageDialog(new JFrame(),
             "Erro de Conversão. O veiculo não foi registrado.",
             "Erro",
             JOptionPane.ERROR_MESSAGE);
         }
-        
         return veiculo;
     }
     
@@ -165,32 +165,56 @@ public class Teste implements ActionListener {
         newVeiculoPasseio = new Passeio();
         
         try{
-            veiculos.setPasseio(preenchePasseio(newVeiculoPasseio));
-            //Custom button text
-            Object[] options = {"Sim",
-                                "Nao"};
-            int retornoCarga = JOptionPane.showOptionDialog(new JFrame(),
-                "Veiculo de Passeio cadastrado com Sucesso. "
-                + "Deseja cadastrar outro Veiculo de Passeio?",
-                "Cadastro de novo Veiculo de Passeio",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[1]);
-
-            System.out.println(retornoCarga);
             
-            if(retornoCarga == 1)
+            if(checaPasseioField())
             {
-                cleanTextFields();
-                janelaCadastroPasseio.dispose();
+                veiculos.setPasseio(preenchePasseio(newVeiculoPasseio));
+            
+                //Custom button text
+                Object[] options = {"Sim", "Nao"};
+                int retornoPasseio = JOptionPane.showOptionDialog(new JFrame(),
+                    "Veiculo de Passeio cadastrado com Sucesso. "
+                    + "Deseja cadastrar outro Veiculo de Passeio?",
+                    "Cadastro de novo Veiculo de Passeio",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]);
+
+                System.out.println(retornoPasseio);
+
+                if(retornoPasseio == 1)
+                {
+                    janelaCadastroPasseio.dispose();
+                }
+                else
+                {
+                    cleanTextFields();
+                }
             }
         }
         catch (VeicExistException e)
         {
+            cleanTextFields();
             janelaCadastroPasseio.dispose();
         }
+    }
+    
+    public static boolean checaPasseioField()
+    {
+        if (qtdPassageiroTexto.getText().equals("") ||
+        placaTexto.getText().equals("") ||           
+        marcaTexto.getText().equals("") ||
+        modeloTexto.getText().equals("") ||
+        corTexto.getText().equals("") ||
+        qtdRodasTexto.getText().equals("") ||
+        velocidadeMaxTexto.getText().equals("") ||
+        qtdPistoesTexto.getText().equals("") ||
+        potenciaTexto.getText().equals(""))
+            return false;
+        
+        return true;
     }
     
     //Metodo para preencher o objeto de carga
@@ -220,6 +244,7 @@ public class Teste implements ActionListener {
             veiculo.getMotor().setPotencia(Integer.parseInt(potenciaTexto.getText()));
         }
         catch(NumberFormatException exception){
+            cleanTextFields();
             JOptionPane.showMessageDialog(new JFrame(),
             "Erro de Conversão. O veiculo não foi registrado.",
             "Erro",
@@ -233,34 +258,62 @@ public class Teste implements ActionListener {
     {
         newVeiculoCarga = new Carga();
         
+        
         try{
-            veiculos.setCarga(preencheCarga(newVeiculoCarga));
-            //Custom button text
-            Object[] options = {"Sim",
-                                "Nao"};
-            int retornoCarga = JOptionPane.showOptionDialog(new JFrame(),
-                "Veiculo de Carga cadastrado com Sucesso. "
-                + "Deseja cadastrar outro Veiculo de Carga?",
-                "Cadastro de novo Veiculo de Carga",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[1]);
-
-            System.out.println(retornoCarga);
-            
-            if(retornoCarga == 1)
+            if(checaCargaField())
             {
-                cleanTextFields();
-                janelaCadastroCarga.dispose();
+                veiculos.setCarga(preencheCarga(newVeiculoCarga));
+
+                //Custom button text
+                Object[] options = {"Sim",
+                                    "Nao"};
+                int retornoCarga = JOptionPane.showOptionDialog(new JFrame(),
+                    "Veiculo de Carga cadastrado com Sucesso. "
+                    + "Deseja cadastrar outro Veiculo de Carga?",
+                    "Cadastro de novo Veiculo de Carga",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+
+                System.out.println(retornoCarga);
+
+                if(retornoCarga == 1)
+                {
+                    cleanTextFields();
+                    janelaCadastroCarga.dispose();
+                }
+                else
+                {
+                    cleanTextFields();
+                }
             }
-          
         }
         catch (VeicExistException e)
         {
+            cleanTextFields();
             janelaCadastroCarga.dispose();
         }
+    }
+    
+    public static boolean checaCargaField()
+    {
+        if (
+            taraTexto.getText().equals("") ||
+            cargaMaxTexto.getText().equals("") ||    
+            placaTexto.getText().equals("") ||           
+            marcaTexto.getText().equals("") ||
+            modeloTexto.getText().equals("") ||
+            corTexto.getText().equals("") ||
+            qtdRodasTexto.getText().equals("") ||
+            velocidadeMaxTexto.getText().equals("") ||
+            qtdPistoesTexto.getText().equals("") ||
+            potenciaTexto.getText().equals("")
+                )
+            return false;
+        
+        return true;
     }
     
     //Carrega todas Janelas do Software
@@ -1458,16 +1511,11 @@ public class Teste implements ActionListener {
     public static void excluirTodosPasseio(){
 
         boolean existePlacaPasseio = false;
-
+        
         if (!veiculos.getPasseio().isEmpty())
         {
-            for (Passeio passeioElem : veiculos.getPasseio()) {
-                if (passeioElem!= null)
-                {
-                    veiculos.excluiPasseio(passeioElem);
-                    existePlacaPasseio = true;
-                }
-            }
+            veiculos.excluiPasseioCompleto();
+            existePlacaPasseio = true;
         }
         
         DefaultTableModel model = (DefaultTableModel) tabelaPasseio.getModel();
@@ -1588,13 +1636,8 @@ public class Teste implements ActionListener {
 
         if (!veiculos.getCarga().isEmpty())
         {
-            for (Carga CargaElem : veiculos.getCarga()) {
-                if (CargaElem!= null)
-                {
-                    veiculos.excluiCarga(CargaElem);
-                    existeCarga = true;
-                }
-            }
+            veiculos.excluiCargaCompleto();
+            existeCarga = true;
         }
         
         DefaultTableModel model = (DefaultTableModel) tabelaCarga.getModel();
@@ -1695,5 +1738,54 @@ public class Teste implements ActionListener {
         else if(e.getSource().equals(btSairTelaImprimirCarga)){
             janelaImprimeExcluiVeiculosCarga.dispose();
         }
+        else if(e.getSource().equals(btNovoPasseio)){
+            String[] options = {"Sim", "Nao"};
+            int retornoPasseio = JOptionPane.showOptionDialog(new JFrame(),
+                    "Deseja cadastrar outro Veiculo de Passeio?",
+                    "Cadastro de novo Veiculo de Passeio",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+
+            System.out.println(retornoPasseio);
+
+            if(retornoPasseio == 1)
+            {
+                cleanTextFields();
+                janelaCadastroPasseio.dispose();
+            }
+            else
+            {
+                cleanTextFields();
+            }
+            
+        }
+        else if(e.getSource().equals(btNovoCarga)){
+            String[] options = {"Sim", "Nao"};
+            int retornoCarga = JOptionPane.showOptionDialog(new JFrame(),
+                    "Deseja cadastrar outro Veiculo de Carga?",
+                    "Cadastro de novo Veiculo de Carga",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+
+            System.out.println(retornoCarga);
+
+            if(retornoCarga == 1)
+            {
+                cleanTextFields();
+                janelaCadastroCarga.dispose();
+            }
+            else
+            {
+                cleanTextFields();
+            }
+        }
+        
+        
     }
 }
