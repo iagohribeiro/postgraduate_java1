@@ -14,11 +14,16 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -41,34 +46,61 @@ public class Teste implements ActionListener {
     private static JFrame janelaVeiculoCarga = new JFrame("");
     private static JFrame janelaCadastroCarga;
     private static JFrame janelaCadastroPasseio;
-    private static JFrame janelaConsultaExcluiVeiculos = new JFrame("");
-    private static JFrame janelaImprimeExcluiVeiculos = new JFrame("");
+    private static JFrame janelaConsultaExcluiVeiculosPasseio;
+    private static JFrame janelaConsultaExcluiVeiculosCarga;
+    private static JFrame janelaImprimeExcluiVeiculosPasseio;
+    private static JFrame janelaImprimeExcluiVeiculosCarga;
     
-    //JButton Elements
+    //-------------------------------JButton Elements
+    //Botoes Tela Principal
     private static JButton btPasseio = new JButton("Passeio");
     private static JButton btCarga = new JButton("Carga");
     
+    //Botoes Tela Passeio
     private static JButton btCadastrarPasseio = new JButton("Cadastrar");
     private static JButton btConsultarPasseio = new JButton("Consultar / Excluir pela placa");
     private static JButton btImprimirPasseio = new JButton("Imprimir / Excluir Todos");
     private static JButton btSairPasseio = new JButton("Sair");
     
+    //Botoes Tela Carga
     private static JButton btCadastrarCarga = new JButton("Cadastrar");
     private static JButton btConsultarCarga = new JButton("Consultar / Excluir pela placa");
     private static JButton btImprimirCarga = new JButton("Imprimir / Excluir Todos");
     private static JButton btSairCarga = new JButton("Sair");
     
+    //Botoes Tela Cadastrar Carga
     private static JButton btCadastrarNewCarga = new JButton("Cadastrar");
     private static JButton btLimparCarga = new JButton("Limpar");
     private static JButton btNovoCarga = new JButton("Novo");
     private static JButton btSairTelaCadastarCarga = new JButton("Sair");
     
+    //Botoes Tela Cadastrar Passeio
     private static JButton btCadastrarNewPasseio= new JButton("Cadastrar");
     private static JButton btLimparPasseio = new JButton("Limpar");
     private static JButton btNovoPasseio = new JButton("Novo");
     private static JButton btSairTelaCadastarPasseio = new JButton("Sair");
     
-    //JTextFields
+    //Botoes Tela Consultar Passeio
+    private static JButton btConsultarPlacaPasseio= new JButton("Consultar");
+    private static JButton btExcluirPasseio = new JButton("Exluir");
+    private static JButton btSairTelaConsultarPasseio = new JButton("Sair");
+    
+    //Botoes Tela Consultar Carga
+    private static JButton btConsultarPlacaCarga= new JButton("Consultar");
+    private static JButton btExcluirCarga = new JButton("Exluir");
+    private static JButton btSairTelaConsultarCarga = new JButton("Sair");
+    
+    //Botoes Tela Imprimir Passeio
+    private static JButton btImprimirTodosPasseio= new JButton("Imprimir Todos");
+    private static JButton btExcluirTodosPasseio = new JButton("Exluir Todos");
+    private static JButton btSairTelaImprimirPasseio = new JButton("Sair");
+    
+    //Botoes Tela Imprimir Carga
+    private static JButton btImprimirTodosCarga= new JButton("Imprimir Todos");
+    private static JButton btExcluirTodosCarga = new JButton("Exluir Todos");
+    private static JButton btSairTelaImprimirCarga= new JButton("Sair");
+    
+    //-------------------------------JTextFields
     private static JTextField taraTexto = new JTextField();
     private static JTextField cargaMaxTexto = new JTextField();
     private static JTextField placaTexto = new JTextField();
@@ -80,209 +112,17 @@ public class Teste implements ActionListener {
     private static JTextField qtdPistoesTexto = new JTextField();
     private static JTextField potenciaTexto = new JTextField();
     private static JTextField qtdPassageiroTexto = new JTextField();
+    private static JTextField velMaxConvetidoTexto = new JTextField();
+    private static JTextField qtdAtributoNumericoTexto = new JTextField();
+    private static JTextField qtdLetrasTexto = new JTextField();
+    
+    //JTables
+    private static JTable tabelaPasseio;
+    private static JTable tabelaCarga;
+    private static JScrollPane barraRolagem;
     
     public static void main(String[] args) throws VeicExistException, VelocException{
-        
-        boolean executando = true;
-        int escolha = 0;
         carregaJanelaPrincipal();
-        
-        while (executando){
-            
-            /*System.out.println("""
-                           \t\t\tSistema de Gestao de Veiculos - Menu Inicial\n
-                           \t\t\t\t1. Cadastrar Veiculo de Passeio
-                           \t\t\t\t2. Cadastrar Veiculo de Carga
-                           \t\t\t\t3. Imprimir Todos os Veiculos de Passeio
-                           \t\t\t\t4. Imprimir Todos os Veiculos de Carga
-                           \t\t\t\t5. Imprimir Veiculo de Passeio pela Placa
-                           \t\t\t\t6. Imprimir Veiculo de Carga pela Placa
-                           \t\t\t\t7. Excluir Veiculo de Passeio pela Placa
-                           \t\t\t\t8. Excluir Veiculo de Carga pela Placa
-                           \t\t\t\t9. Sair do Sistema
-                           """);
-            try{
-                escolha = Integer.parseInt(entradaUsuario.entDados("\nEscolha uma opcao do Menu:"));
-            }
-            catch(NumberFormatException e)
-            {
-                System.out.println("Erro: Por favor entre com um valor Inteiro. Aperte ENTER para tentar novamente.");
-                entradaUsuario.entDados("");
-
-                continue;
-            }
-            
-            switch (escolha) {
-                case 1:
-                    while (true)
-                    {
-                        newVeiculoPasseio = new Passeio();
-
-                        try{
-                            veiculos.setPasseio(preenchePasseio(newVeiculoPasseio));
-                        }
-                        catch (VeicExistException e)
-                        {
-                            break;
-                        }
-
-                        entradaUsuario.entDados("Veiculo de Passeio cadastrado com Sucesso. Aperte ENTER.");
-
-
-                        String retorno = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Passeio? <sim/nao>");
-
-                        if(retorno.toLowerCase().equals("nao".toLowerCase()) || !retorno.toLowerCase().equals("sim".toLowerCase()))
-                            break;
-                    }
-                    break;
-                case 2:
-                    while (true)
-                    {
-                        newVeiculoCarga = new Carga();
-                        try{
-                            veiculos.setCarga(preencheCarga(newVeiculoCarga));
-                        }
-                        catch (VeicExistException e)
-                        {
-                            break;
-                        }
-
-                        entradaUsuario.entDados("Veiculo de Carga cadastrado com Sucesso. Aperte ENTER.");
-
-
-                        String retornoCarga = entradaUsuario.entDados("Deseja cadastrar outro Veiculo de Carga? <sim/nao>");
-
-                        if(retornoCarga.toLowerCase().equals("nao".toLowerCase()) || !retornoCarga.toLowerCase().equals("sim".toLowerCase()))
-                            break;
-                    }
-                    break;
-                case 3:
-                    System.out.println("\n\n--------------------------------------");
-                    System.out.println("Todos Veiculos de Passeio");
-                    System.out.println("--------------------------------------");
-                    
-                    boolean temPasseio = false;
-                    
-                    for (Passeio passeioElem : veiculos.getPasseio()) {
-                        if (passeioElem != null)
-                        {
-                            impPasseio(passeioElem);
-                            temPasseio = true;
-                        }
-                    }
-                    
-                    if(!temPasseio)
-                        entradaUsuario.entDados("\nNao ha veiculos de passeio cadastrado. Aperte ENTER.");
-                    
-                    break;
-                case 4:
-                    System.out.println("\n\n--------------------------------------");
-                    System.out.println("Todos Veiculos de Carga");
-                    System.out.println("--------------------------------------");
-                    
-                    boolean temCarga = false;
-                    
-                    for (Carga cargaElem : veiculos.getCarga()) {
-                        if (cargaElem != null)
-                        {
-                            impCarga(cargaElem);
-                            temCarga = true;
-                        }
-                    }
-                    
-                    if(!temCarga)
-                        entradaUsuario.entDados("\nNao ha veiculos de carga cadastrado. Aperte ENTER.");
-                    
-                    break;
-                case 5:      
-                    String placa = entradaUsuario.entDados("Digite a placa do Veiculo de Passeio.");
-                    boolean temPlacaPasseio = false;
-                    
-                    //Verifica se existe e imprime o veiculo a partir da placa fornecida
-                    for (Passeio passeioElem : veiculos.getPasseio()) {
-                        if (passeioElem!= null)
-                        {
-                            if (passeioElem.getPlaca().toLowerCase().equals(placa.toLowerCase()))
-                            {
-                                impPasseio(passeioElem);
-                                temPlacaPasseio = true;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if (!temPlacaPasseio)
-                        System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
-                    
-                    break;
-                case 6:      
-                    String placaCarga = entradaUsuario.entDados("Digite a placa do Veiculo de Carga.");
-                    boolean temPlaca = false;
-                    //Verifica se existe e imprime o veiculo a partir da placa fornecida
-                    for (Carga cargaElem : veiculos.getCarga()) {
-                        if (cargaElem != null)
-                        {
-                            if (cargaElem.getPlaca().toLowerCase().equals(placaCarga.toLowerCase()))
-                            {
-                                impCarga(cargaElem);
-                                temPlaca = true;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if (!temPlaca)
-                        System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
-                    
-                    break;
-                case 7:
-                    String placaPasseioExcluir = entradaUsuario.entDados("Digite a placa do Veiculo de Passeio.");
-                    boolean existePlacaPasseio = false;
-                    
-                    for (Passeio passeioElem : veiculos.getPasseio()) {
-                        if (passeioElem!= null)
-                        {
-                            if (passeioElem.getPlaca().toLowerCase().equals(placaPasseioExcluir.toLowerCase()))
-                            {
-                                veiculos.excluiPasseio(passeioElem);
-                                existePlacaPasseio = true;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if (!existePlacaPasseio)
-                        System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
-                    
-                    break;
-                case 8:
-                    String placaCargaExcluir = entradaUsuario.entDados("Digite a placa do Veiculo de Carga.");
-                    boolean existePlacaCarga = false;
-                    //Verifica se existe e imprime o veiculo a partir da placa fornecida
-                    for (Carga cargaElem : veiculos.getCarga()) {
-                        if (cargaElem != null)
-                        {
-                            if (cargaElem.getPlaca().toLowerCase().equals(placaCargaExcluir.toLowerCase()))
-                            {
-                                veiculos.excluiCarga(cargaElem);
-                                existePlacaCarga = true;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if (!existePlacaCarga)
-                        System.out.println("\nNao foi encontrado Veiculo com a placa fornecida.\n");
-                    
-                    break;
-                case 9:
-                    executando = false;
-                    break;
-                default:
-                    System.out.println("\nPor favor digite um número entre 1 e 9\n");
-                    break;
-            } */ 
-        }
     }
     
     //Metodo para preencher o objeto de pasaseio
@@ -346,29 +186,11 @@ public class Teste implements ActionListener {
                 cleanTextFields();
                 janelaCadastroPasseio.dispose();
             }
-          
         }
         catch (VeicExistException e)
         {
             janelaCadastroPasseio.dispose();
         }
-    }
-    
-    //Metodo para imprimir objetos de veiculos de passeio
-    public static void impPasseio(Passeio passeio){
-        System.out.println("----------------------------------------");
-        System.out.println("Placa..: "+ passeio.getPlaca());
-        System.out.println("Marca........: "+ passeio.getMarca());
-        System.out.println("Modelo...................: "+ passeio.getModelo());
-        System.out.println("Cor..................: "+ passeio.getCor());
-        System.out.println("VelocidadeMaxima........: "+ passeio.getVelocMax());
-        System.out.println("Qtd de Rodas.............: "+ passeio.getQtdRodas());
-        System.out.println("Qtd Pistoes de motor...: "+ passeio.getMotor().getQtdPist());
-        System.out.println("Potencia do motor.......: "+ passeio.getMotor().getPotencia());
-        System.out.println("Qtd de Passageiros......: "+ passeio.getQtdPassageiros());
-        System.out.println("Qtd. total de Letras....: "+ passeio.calcular());
-        System.out.println("Calc Vel Maxima em meter/hour: " + passeio.calcVel(passeio.getVelocMax())+"\n");
-        System.out.println("----------------------------------------\n");
     }
     
     //Metodo para preencher o objeto de carga
@@ -441,24 +263,6 @@ public class Teste implements ActionListener {
         }
     }
     
-    //Metodo para imprimir objetos de veiculos de carga
-    public static void impCarga(Carga carga){
-        System.out.println("----------------------------------------");
-        System.out.println("Placa..: "+ carga.getPlaca());
-        System.out.println("Marca........: "+ carga.getMarca());
-        System.out.println("Modelo...................: "+ carga.getModelo());
-        System.out.println("Cor..................: "+ carga.getCor());
-        System.out.println("VelocidadeMaxima........: "+ carga.getVelocMax());
-        System.out.println("Qtd de Rodas.............: "+ carga.getQtdRodas());
-        System.out.println("Qtd Pistoes de motor...: "+ carga.getMotor().getQtdPist());
-        System.out.println("Potencia do motor.......: "+ carga.getMotor().getPotencia());
-        System.out.println("Carga Maxima......: "+ carga.getCargaMax());
-        System.out.println("Tara......: "+ carga.getTara());
-        System.out.println("Qtd. total atributos Numericos....: "+ carga.calcular());
-        System.out.println("Calc Vel Maxima em cetimetro/hour: " + carga.calcVel(carga.getVelocMax()));
-        System.out.println("----------------------------------------\n");
-    }
-    
     //Carrega todas Janelas do Software
     public static void carregaJanelaPrincipal() {
         //Janela Principal
@@ -484,6 +288,7 @@ public class Teste implements ActionListener {
         janelaPrincipal.setVisible(true);
         
     }
+    
     public static void carregaVeiculoPasseio() {
         
         //Janela Veiculos passeio
@@ -759,14 +564,14 @@ public class Teste implements ActionListener {
         janelaCadastroCarga.setVisible(true); 
     }
     
-        public static void carregaCadastroPasseio() {
+    public static void carregaCadastroPasseio() {
         janelaCadastroPasseio = new JFrame("Cadastro de Passeio");
         janelaCadastroPasseio.setLayout(new GridBagLayout());
         janelaCadastroPasseio.setSize(400,500);
         janelaCadastroPasseio.getContentPane().setBackground(new Color(230, 230, 230));
-        
+
         GridBagConstraints contraints = new GridBagConstraints();
-        
+
         JLabel qtdPassageiro = new JLabel("Qtd. Passageiros: ");
         JLabel placa = new JLabel("Placa: ");
         JLabel marca = new JLabel("Marca: ");
@@ -776,15 +581,15 @@ public class Teste implements ActionListener {
         JLabel velocidadeMax = new JLabel("Velocidade Max.:");
         JLabel qtdPistoes = new JLabel("Qtd. Pistoes: ");
         JLabel portencia = new JLabel("Potencia: ");
-        
+
         cleanTextFields();
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 0;
         contraints.anchor = GridBagConstraints.FIRST_LINE_START;
         janelaCadastroPasseio.add(qtdPassageiro, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 1;
         contraints.gridy = 0;
@@ -793,13 +598,13 @@ public class Teste implements ActionListener {
         janelaCadastroPasseio.add(qtdPassageiroTexto, contraints);
 
         contraints.gridwidth = 1;
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 2;
         contraints.anchor = GridBagConstraints.LINE_START;
         janelaCadastroPasseio.add(placa, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 1;
         contraints.gridy = 2;
@@ -808,13 +613,13 @@ public class Teste implements ActionListener {
         janelaCadastroPasseio.add(placaTexto, contraints);
 
         contraints.gridwidth = 1;
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 3;
         contraints.anchor = GridBagConstraints.LINE_START;
         janelaCadastroPasseio.add(marca, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 1;
         contraints.gridy = 3;
@@ -823,88 +628,88 @@ public class Teste implements ActionListener {
         janelaCadastroPasseio.add(marcaTexto, contraints);
 
         contraints.gridwidth = 1;
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 4;
         contraints.anchor = GridBagConstraints.LINE_START;
         janelaCadastroPasseio.add(modelo, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 1;
         contraints.gridy = 4;
         contraints.gridwidth = 4;
         contraints.anchor = GridBagConstraints.LINE_END;
         janelaCadastroPasseio.add(modeloTexto, contraints);
-        
+
         contraints.gridwidth = 1;
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 5;
         contraints.anchor = GridBagConstraints.LINE_START;
         janelaCadastroPasseio.add(cor, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 1;
         contraints.gridy = 5;
         contraints.gridwidth = 4;
         contraints.anchor = GridBagConstraints.LINE_END;
         janelaCadastroPasseio.add(corTexto, contraints);
-        
+
         contraints.gridwidth = 1;
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 6;
         contraints.anchor = GridBagConstraints.LINE_START;
         janelaCadastroPasseio.add(qtdRodas, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 1;
         contraints.gridy = 6;
         contraints.gridwidth = 4;
         contraints.anchor = GridBagConstraints.LINE_END;
         janelaCadastroPasseio.add(qtdRodasTexto, contraints);
-        
+
         contraints.gridwidth = 1;
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 7;
         contraints.anchor = GridBagConstraints.LINE_START;
         janelaCadastroPasseio.add(velocidadeMax, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 1;
         contraints.gridy = 7;
         contraints.gridwidth = 4;
         contraints.anchor = GridBagConstraints.LINE_END;
         janelaCadastroPasseio.add(velocidadeMaxTexto, contraints);
-        
+
         contraints.gridwidth = 1;
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 8;
         contraints.anchor = GridBagConstraints.LINE_START;
         janelaCadastroPasseio.add(qtdPistoes, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 1;
         contraints.gridy = 8;
         contraints.gridwidth = 4;
         contraints.anchor = GridBagConstraints.LINE_END;
         janelaCadastroPasseio.add(qtdPistoesTexto, contraints);
-        
+
         contraints.gridwidth = 1;
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 9;
         contraints.anchor = GridBagConstraints.LINE_START;
         janelaCadastroPasseio.add(portencia, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 1;
         contraints.gridy = 9;
@@ -913,28 +718,28 @@ public class Teste implements ActionListener {
         janelaCadastroPasseio.add(potenciaTexto, contraints);
 
         contraints.gridwidth = 1;
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 0;
         contraints.gridy = 10;
         contraints.anchor = GridBagConstraints.PAGE_END;
         btCadastrarNewPasseio.addActionListener(testeClass);
         janelaCadastroPasseio.add(btCadastrarNewPasseio, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 2;
         contraints.gridy = 10;
         contraints.anchor = GridBagConstraints.PAGE_END;
         btLimparPasseio.addActionListener(testeClass);
         janelaCadastroPasseio.add(btLimparPasseio, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 3;
         contraints.gridy = 10;
         contraints.anchor = GridBagConstraints.PAGE_END;
         btNovoPasseio.addActionListener(testeClass);
         janelaCadastroPasseio.add(btNovoPasseio, contraints);
-        
+
         contraints.fill = GridBagConstraints.HORIZONTAL;
         contraints.gridx = 4;
         contraints.gridy = 10;
@@ -942,8 +747,584 @@ public class Teste implements ActionListener {
         btSairTelaCadastarPasseio.setBackground(new Color(237, 28, 36));
         btSairTelaCadastarPasseio.addActionListener(testeClass);
         janelaCadastroPasseio.add(btSairTelaCadastarPasseio, contraints);
-        
+
         janelaCadastroPasseio.setVisible(true); 
+    }
+
+    public static void carregaConsultaPasseio() {
+        janelaConsultaExcluiVeiculosPasseio = new JFrame("Consultar / Excluir pela placa");
+        janelaConsultaExcluiVeiculosPasseio.setLayout(new GridBagLayout());
+        janelaConsultaExcluiVeiculosPasseio.setSize(600,800);
+        janelaConsultaExcluiVeiculosPasseio.getContentPane().setBackground(new Color(230, 230, 230));
+
+        GridBagConstraints contraints = new GridBagConstraints();
+
+        JLabel qtdPassageiro = new JLabel("Qtd. Passageiros: ");
+        JLabel placa = new JLabel("Informe a Placa: ");
+        JLabel marca = new JLabel("Marca: ");
+        JLabel modelo = new JLabel("Modelo: ");
+        JLabel cor = new JLabel("Cor: ");
+        JLabel qtdRodas = new JLabel("Qtd. Rodas: ");
+        JLabel velocidadeMax = new JLabel("Velocidade Max.:");
+        JLabel qtdPistoes = new JLabel("Qtd. Pistoes: ");
+        JLabel portencia = new JLabel("Potencia: ");
+        JLabel qtdLetras = new JLabel("Qtd. total de Letras: ");
+        JLabel velConvertida = new JLabel("Calc Vel Maxima em meter/hour: ");
+
+        cleanTextFields();
+
+        placa.setForeground(Color.red);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 0;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(placa, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 0;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaConsultaExcluiVeiculosPasseio.add(placaTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 1;
+        contraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(qtdPassageiro, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 1;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.FIRST_LINE_END;
+        qtdPassageiroTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(qtdPassageiroTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 3;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(marca, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 3;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        marcaTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(marcaTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 4;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(modelo, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 4;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        modeloTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(modeloTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 5;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(cor, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 5;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        corTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(corTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 6;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(qtdRodas, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 6;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        qtdRodasTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(qtdRodasTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 7;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(velocidadeMax, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 7;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        velocidadeMaxTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(velocidadeMaxTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 8;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(qtdPistoes, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 8;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        qtdPistoesTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(qtdPistoesTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 9;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(portencia, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 9;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        potenciaTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(potenciaTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(qtdLetras, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 10;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        qtdLetrasTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(qtdLetrasTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 11;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosPasseio.add(velConvertida, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 11;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        velMaxConvetidoTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosPasseio.add(velMaxConvetidoTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 2;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btConsultarPlacaPasseio.addActionListener(testeClass);
+        janelaConsultaExcluiVeiculosPasseio.add(btConsultarPlacaPasseio, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 3;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btExcluirPasseio.addActionListener(testeClass);
+        janelaConsultaExcluiVeiculosPasseio.add(btExcluirPasseio, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 4;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btSairTelaConsultarPasseio.setBackground(new Color(237, 28, 36));
+        btSairTelaConsultarPasseio.addActionListener(testeClass);
+        janelaConsultaExcluiVeiculosPasseio.add(btSairTelaConsultarPasseio, contraints);
+
+        janelaConsultaExcluiVeiculosPasseio.setVisible(true); 
+    }
+    
+    public static void buscaPasseio(){
+        boolean temPlacaPasseio = false;
+
+        //Verifica se existe e imprime o veiculo a partir da placa fornecida
+        for (Passeio passeioElem : veiculos.getPasseio()) {
+            if (passeioElem!= null)
+            {
+                if (passeioElem.getPlaca().toLowerCase().equals(placaTexto.getText().toLowerCase()))
+                {
+                    marcaTexto.setText(passeioElem.getMarca());
+                    modeloTexto.setText(passeioElem.getModelo());
+                    corTexto.setText(passeioElem.getCor());
+                    qtdRodasTexto.setText(String.valueOf(passeioElem.getQtdRodas()));
+                    velocidadeMaxTexto.setText(String.valueOf(passeioElem.getVelocMax()));
+                    qtdPistoesTexto.setText(String.valueOf(passeioElem.getMotor().getQtdPist()));
+                    potenciaTexto.setText(String.valueOf(passeioElem.getMotor().getPotencia()));
+                    qtdPassageiroTexto.setText(String.valueOf(passeioElem.getQtdPassageiros()));
+                    qtdLetrasTexto.setText(String.valueOf(passeioElem.calcular()));
+                    velMaxConvetidoTexto.setText(String.valueOf(passeioElem.calcVel(passeioElem.getVelocMax())));
+                    temPlacaPasseio = true;
+                    break;
+                }
+            }
+        }
+
+        if (!temPlacaPasseio)
+            JOptionPane.showMessageDialog(new JFrame(),
+        "Nao foi encontrado Veiculo com a placa fornecida.",
+        "Warning",
+        JOptionPane.WARNING_MESSAGE);
+    }
+    
+    public static void excluiPasseio(){
+        boolean existePlacaPasseio = false;
+
+        for (Passeio passeioElem : veiculos.getPasseio()) {
+            if (passeioElem!= null)
+            {
+                if (passeioElem.getPlaca().toLowerCase().equals(placaTexto.getText().toLowerCase()))
+                {
+                    veiculos.excluiPasseio(passeioElem);
+                    existePlacaPasseio = true;
+                    break;
+                }
+            }
+        }
+
+        if (!existePlacaPasseio)
+            JOptionPane.showMessageDialog(new JFrame(),
+        "Nao foi encontrado Veiculo com a placa fornecida.",
+        "Warning",
+        JOptionPane.WARNING_MESSAGE);
+    }
+    
+    public static void carregaConsultaCarga() {
+        janelaConsultaExcluiVeiculosCarga = new JFrame("Consultar / Excluir pela placa");
+        janelaConsultaExcluiVeiculosCarga.setLayout(new GridBagLayout());
+        janelaConsultaExcluiVeiculosCarga.setSize(600,800);
+        janelaConsultaExcluiVeiculosCarga.getContentPane().setBackground(new Color(230, 230, 230));
+
+        GridBagConstraints contraints = new GridBagConstraints();
+
+        JLabel tara = new JLabel("Tara: ");
+        JLabel cargaMax = new JLabel("Carga Max.: ");
+        JLabel placa = new JLabel("Informe a Placa: ");
+        JLabel marca = new JLabel("Marca: ");
+        JLabel modelo = new JLabel("Modelo: ");
+        JLabel cor = new JLabel("Cor: ");
+        JLabel qtdRodas = new JLabel("Qtd. Rodas: ");
+        JLabel velocidadeMax = new JLabel("Velocidade Max.:");
+        JLabel qtdPistoes = new JLabel("Qtd. Pistoes: ");
+        JLabel portencia = new JLabel("Potencia: ");
+        JLabel qtdAtributoNumerico = new JLabel("Qtd. total atributos Numericos: ");
+        JLabel velConvertida = new JLabel("Calc Vel Maxima em cetimetro/hour: ");
+
+        cleanTextFields();
+
+        placa.setForeground(Color.red);
+        
+        /**/
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 0;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(placa, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 0;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        janelaConsultaExcluiVeiculosCarga.add(placaTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 1;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(tara, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 1;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        taraTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(taraTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 2;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(cargaMax, contraints);
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 2;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        cargaMaxTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(cargaMaxTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 3;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(marca, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 3;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        marcaTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(marcaTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 4;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(modelo, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 4;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        modeloTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(modeloTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 5;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(cor, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 5;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        corTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(corTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 6;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(qtdRodas, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 6;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        qtdRodasTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(qtdRodasTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 7;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(velocidadeMax, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 7;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        velocidadeMaxTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(velocidadeMaxTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 8;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(qtdPistoes, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 8;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        qtdPistoesTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(qtdPistoesTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 9;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(portencia, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 9;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        potenciaTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(potenciaTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 10;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(qtdAtributoNumerico, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 10;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        qtdAtributoNumericoTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(qtdAtributoNumericoTexto, contraints);
+
+        contraints.gridwidth = 1;
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 11;
+        contraints.anchor = GridBagConstraints.LINE_START;
+        janelaConsultaExcluiVeiculosCarga.add(velConvertida, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 1;
+        contraints.gridy = 11;
+        contraints.gridwidth = 4;
+        contraints.anchor = GridBagConstraints.LINE_END;
+        velMaxConvetidoTexto.setEnabled(false);
+        janelaConsultaExcluiVeiculosCarga.add(velMaxConvetidoTexto, contraints);
+
+        contraints.gridwidth = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 2;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btConsultarPlacaCarga.addActionListener(testeClass);
+        janelaConsultaExcluiVeiculosCarga.add(btConsultarPlacaCarga, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 3;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btExcluirCarga.addActionListener(testeClass);
+        janelaConsultaExcluiVeiculosCarga.add(btExcluirCarga, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 4;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btSairTelaConsultarCarga.setBackground(new Color(237, 28, 36));
+        btSairTelaConsultarCarga.addActionListener(testeClass);
+        janelaConsultaExcluiVeiculosCarga.add(btSairTelaConsultarCarga, contraints);
+
+        janelaConsultaExcluiVeiculosCarga.setVisible(true); 
+    }
+    
+    public static void buscaCarga(){
+        boolean temPlacaCarga = false;
+
+        //Verifica se existe e imprime o veiculo a partir da placa fornecida
+        for (Carga CargaElem : veiculos.getCarga()) {
+            if (CargaElem!= null)
+            {
+                if (CargaElem.getPlaca().toLowerCase().equals(placaTexto.getText().toLowerCase()))
+                {
+                    marcaTexto.setText(CargaElem.getMarca());
+                    modeloTexto.setText(CargaElem.getModelo());
+                    corTexto.setText(CargaElem.getCor());
+                    qtdRodasTexto.setText(String.valueOf(CargaElem.getQtdRodas()));
+                    velocidadeMaxTexto.setText(String.valueOf(CargaElem.getVelocMax()));
+                    qtdPistoesTexto.setText(String.valueOf(CargaElem.getMotor().getQtdPist()));
+                    potenciaTexto.setText(String.valueOf(CargaElem.getMotor().getPotencia()));
+                    qtdAtributoNumericoTexto.setText(String.valueOf(CargaElem.calcular()));
+                    velMaxConvetidoTexto.setText(String.valueOf(CargaElem.calcVel(CargaElem.getVelocMax())));
+                    taraTexto.setText(String.valueOf(CargaElem.getTara()));
+                    cargaMaxTexto.setText(String.valueOf(CargaElem.getCargaMax()));
+                    temPlacaCarga = true;
+                    break;
+                }
+            }
+        }
+
+        if (!temPlacaCarga)
+            JOptionPane.showMessageDialog(new JFrame(),
+        "Nao foi encontrado Veiculo com a placa fornecida.",
+        "Warning",
+        JOptionPane.WARNING_MESSAGE);
+    }
+    
+    public static void excluiCarga(){
+        boolean existePlacaCarga = false;
+
+        for (Carga cargaElem : veiculos.getCarga()) {
+            if (cargaElem!= null)
+            {
+                if (cargaElem.getPlaca().toLowerCase().equals(placaTexto.getText().toLowerCase()))
+                {
+                    veiculos.excluiCarga(cargaElem);
+                    existePlacaCarga = true;
+                    break;
+                }
+            }
+        }
+
+        if (!existePlacaCarga)
+            JOptionPane.showMessageDialog(new JFrame(),
+        "Nao foi encontrado Veiculo com a placa fornecida.",
+        "Warning",
+        JOptionPane.WARNING_MESSAGE);
     }
     
     public static void cleanTextFields(){
@@ -958,8 +1339,278 @@ public class Teste implements ActionListener {
         qtdPistoesTexto.setText("");
         potenciaTexto.setText("");
         qtdPassageiroTexto.setText("");
+        velMaxConvetidoTexto.setText("");
+        qtdAtributoNumericoTexto.setText("");
+        qtdLetrasTexto.setText("");
+        
+        taraTexto.setEnabled(true);
+        cargaMaxTexto.setEnabled(true);
+        placaTexto.setEnabled(true);
+        marcaTexto.setEnabled(true);
+        modeloTexto.setEnabled(true);
+        corTexto.setEnabled(true);
+        qtdRodasTexto.setEnabled(true);
+        velocidadeMaxTexto.setEnabled(true);
+        qtdPistoesTexto.setEnabled(true);
+        potenciaTexto.setEnabled(true);
+        qtdPassageiroTexto.setEnabled(true);
+        velMaxConvetidoTexto.setEnabled(true);
+        qtdAtributoNumericoTexto.setEnabled(true);
+        qtdLetrasTexto.setEnabled(true);
     }
+    
+    public static void carregaImprimirPasseio() {
+        janelaImprimeExcluiVeiculosPasseio = new JFrame("Imprimir / Excluir todos");
+        janelaImprimeExcluiVeiculosPasseio.setLayout(new GridBagLayout());
+        janelaImprimeExcluiVeiculosPasseio.setSize(600,800);
+        janelaImprimeExcluiVeiculosPasseio.getContentPane().setBackground(new Color(230, 230, 230));
 
+        GridBagConstraints contraints = new GridBagConstraints();
+        
+        cleanTextFields();
+        
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Placa");
+        model.addColumn("Marca");
+        model.addColumn("Modelo");
+        model.addColumn("Cor");
+        model.addColumn("Qtd. Rodas");
+        model.addColumn("Veloc Max");
+        model.addColumn("Qtd.Pist");
+        model.addColumn("Potencia");
+        model.addColumn("Qtd. Passageiro");
+        model.addColumn("Qtd. Letras");
+        model.addColumn("Vel. Convertida");
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 0;
+        contraints.gridwidth = 11;
+        contraints.gridheight = 11;
+        tabelaPasseio = new JTable(model);
+        barraRolagem = new JScrollPane(tabelaPasseio);
+        janelaImprimeExcluiVeiculosPasseio.add(barraRolagem, contraints);
+
+        contraints.gridwidth = 1;
+        contraints.gridheight = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 2;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btImprimirTodosPasseio.addActionListener(testeClass);
+        janelaImprimeExcluiVeiculosPasseio.add(btImprimirTodosPasseio, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 3;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btExcluirTodosPasseio.addActionListener(testeClass);
+        janelaImprimeExcluiVeiculosPasseio.add(btExcluirTodosPasseio, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 4;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btSairTelaImprimirPasseio.setBackground(new Color(237, 28, 36));
+        btSairTelaImprimirPasseio.addActionListener(testeClass);
+        janelaImprimeExcluiVeiculosPasseio.add(btSairTelaImprimirPasseio, contraints);
+
+        janelaImprimeExcluiVeiculosPasseio.setVisible(true); 
+    }
+    
+    public static void imprimirPasseio() {
+        DefaultTableModel model = (DefaultTableModel) tabelaPasseio.getModel();
+        
+        boolean temPasseio = false;
+        
+        while(model.getRowCount() > 0)
+        {
+            model.removeRow(0);
+        }
+        
+        for (Passeio passeioElem : veiculos.getPasseio()) {
+            if (passeioElem != null)
+            {
+                model.addRow(new Object[]{
+                passeioElem.getPlaca(),
+                passeioElem.getMarca(),
+                passeioElem.getModelo(),
+                passeioElem.getCor(),
+                passeioElem.getQtdRodas(),
+                passeioElem.getVelocMax(),
+                passeioElem.getMotor().getQtdPist(),
+                passeioElem.getMotor().getPotencia(),
+                passeioElem.getQtdPassageiros(),
+                passeioElem.calcular(),
+                passeioElem.calcVel(passeioElem.getVelocMax())});
+                temPasseio = true;
+            }
+        }
+
+        if(!temPasseio)
+            JOptionPane.showMessageDialog(new JFrame(),
+          "Nao ha veiculos cadastrados.",
+            "Warning",
+        JOptionPane.WARNING_MESSAGE);
+    }
+    
+    public static void excluirTodosPasseio(){
+
+        boolean existePlacaPasseio = false;
+
+        if (!veiculos.getPasseio().isEmpty())
+        {
+            for (Passeio passeioElem : veiculos.getPasseio()) {
+                if (passeioElem!= null)
+                {
+                    veiculos.excluiPasseio(passeioElem);
+                    existePlacaPasseio = true;
+                }
+            }
+        }
+        
+        DefaultTableModel model = (DefaultTableModel) tabelaPasseio.getModel();
+        
+        while(model.getRowCount() > 0)
+        {
+            model.removeRow(0);
+        }
+
+        if (!existePlacaPasseio)
+            JOptionPane.showMessageDialog(new JFrame(),
+        "Nao ha veiculos cadastrados.",
+          "Warning",
+      JOptionPane.WARNING_MESSAGE);
+    }
+    
+    public static void carregaImprimirCarga() {
+        janelaImprimeExcluiVeiculosCarga = new JFrame("Imprimir / Excluir todos");
+        janelaImprimeExcluiVeiculosCarga.setLayout(new GridBagLayout());
+        janelaImprimeExcluiVeiculosCarga.setSize(600,800);
+        janelaImprimeExcluiVeiculosCarga.getContentPane().setBackground(new Color(230, 230, 230));
+
+        GridBagConstraints contraints = new GridBagConstraints();
+        
+        cleanTextFields();
+        
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Placa");
+        model.addColumn("Marca");
+        model.addColumn("Modelo");
+        model.addColumn("Cor");
+        model.addColumn("Qtd. Rodas");
+        model.addColumn("Veloc Max");
+        model.addColumn("Qtd.Pist");
+        model.addColumn("Potencia");
+        model.addColumn("Tara");
+        model.addColumn("Carga Max");
+        model.addColumn("Qtd. atributos Numericos");
+        model.addColumn("Vel. Convertida");
+        
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 0;
+        contraints.gridy = 0;
+        contraints.gridwidth = 12;
+        contraints.gridheight = 12;
+        tabelaCarga = new JTable(model);
+        barraRolagem = new JScrollPane(tabelaCarga);
+        janelaImprimeExcluiVeiculosCarga.add(barraRolagem, contraints);
+
+        contraints.gridwidth = 1;
+        contraints.gridheight = 1;
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 2;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btImprimirTodosCarga.addActionListener(testeClass);
+        janelaImprimeExcluiVeiculosCarga.add(btImprimirTodosCarga, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 3;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btExcluirTodosCarga.addActionListener(testeClass);
+        janelaImprimeExcluiVeiculosCarga.add(btExcluirTodosCarga, contraints);
+
+        contraints.fill = GridBagConstraints.HORIZONTAL;
+        contraints.gridx = 4;
+        contraints.gridy = 12;
+        contraints.anchor = GridBagConstraints.PAGE_END;
+        btSairTelaImprimirCarga.setBackground(new Color(237, 28, 36));
+        btSairTelaImprimirCarga.addActionListener(testeClass);
+        janelaImprimeExcluiVeiculosCarga.add(btSairTelaImprimirCarga, contraints);
+
+        janelaImprimeExcluiVeiculosCarga.setVisible(true); 
+    }
+    
+    public static void imprimirCarga() {
+        DefaultTableModel model = (DefaultTableModel) tabelaCarga.getModel();
+        
+        boolean temCarga = false;
+        
+        while(model.getRowCount() > 0)
+        {
+            model.removeRow(0);
+        }
+        
+        for (Carga CargaElem : veiculos.getCarga()) {
+            if (CargaElem != null)
+            {
+                model.addRow(new Object[]{
+                CargaElem.getPlaca(),
+                CargaElem.getMarca(),
+                CargaElem.getModelo(),
+                CargaElem.getCor(),
+                CargaElem.getQtdRodas(),
+                CargaElem.getVelocMax(),
+                CargaElem.getMotor().getQtdPist(),
+                CargaElem.getMotor().getPotencia(),
+                CargaElem.getTara(),
+                CargaElem.getCargaMax(),
+                CargaElem.calcular(),
+                CargaElem.calcVel(CargaElem.getVelocMax())});
+                temCarga = true;
+            }
+        }
+
+        if(!temCarga)
+            JOptionPane.showMessageDialog(new JFrame(),
+          "Nao ha veiculos cadastrados.",
+            "Warning",
+        JOptionPane.WARNING_MESSAGE);
+    }
+    
+    public static void excluirTodosCarga(){
+
+        boolean existeCarga = false;
+
+        if (!veiculos.getCarga().isEmpty())
+        {
+            for (Carga CargaElem : veiculos.getCarga()) {
+                if (CargaElem!= null)
+                {
+                    veiculos.excluiCarga(CargaElem);
+                    existeCarga = true;
+                }
+            }
+        }
+        
+        DefaultTableModel model = (DefaultTableModel) tabelaCarga.getModel();
+        
+        while(model.getRowCount() > 0)
+        {
+            model.removeRow(0);
+        }
+
+        if (!existeCarga)
+            JOptionPane.showMessageDialog(new JFrame(),
+        "Nao ha veiculos cadastrados.",
+          "Warning",
+      JOptionPane.WARNING_MESSAGE);
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         
@@ -996,6 +1647,53 @@ public class Teste implements ActionListener {
         else if(e.getSource().equals(btCadastrarNewPasseio)){
            cadastraVeiculoPasseio();
         }
-        
+        else if(e.getSource().equals(btConsultarPasseio)){
+           carregaConsultaPasseio();
+        }
+        else if(e.getSource().equals(btConsultarPlacaPasseio)){
+           buscaPasseio();
+        }
+        else if(e.getSource().equals(btExcluirPasseio)){
+           excluiPasseio();
+        }
+        else if(e.getSource().equals(btSairTelaConsultarPasseio)){
+            janelaConsultaExcluiVeiculosPasseio.dispose();
+        }
+        else if(e.getSource().equals(btConsultarCarga)){
+           carregaConsultaCarga();
+        }
+        else if(e.getSource().equals(btConsultarPlacaCarga)){
+           buscaCarga();
+        }
+        else if(e.getSource().equals(btExcluirCarga)){
+           excluiCarga();
+        }
+        else if(e.getSource().equals(btSairTelaConsultarCarga)){
+            janelaConsultaExcluiVeiculosCarga.dispose();
+        }
+        else if(e.getSource().equals(btImprimirPasseio)){
+            carregaImprimirPasseio();
+        }
+        else if(e.getSource().equals(btImprimirTodosPasseio)){
+            imprimirPasseio();
+        }
+        else if(e.getSource().equals(btExcluirTodosPasseio)){
+            excluirTodosPasseio();
+        }
+        else if(e.getSource().equals(btSairTelaImprimirPasseio)){
+            janelaImprimeExcluiVeiculosPasseio.dispose();
+        }
+        else if(e.getSource().equals(btImprimirCarga)){
+            carregaImprimirCarga();
+        }
+        else if(e.getSource().equals(btImprimirTodosCarga)){
+            imprimirCarga();
+        }
+        else if(e.getSource().equals(btExcluirTodosCarga)){
+            excluirTodosCarga();
+        }
+        else if(e.getSource().equals(btSairTelaImprimirCarga)){
+            janelaImprimeExcluiVeiculosCarga.dispose();
+        }
     }
 }

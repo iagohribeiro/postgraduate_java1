@@ -16,7 +16,7 @@ public class VelocException extends Exception {
     public VelocException() {
         JOptionPane.showMessageDialog(new JFrame(),
         "A velocidade máxima está fora dos limites brasileiros.",
-        "Wrning",
+        "Warning",
         JOptionPane.WARNING_MESSAGE);
     }
 }
