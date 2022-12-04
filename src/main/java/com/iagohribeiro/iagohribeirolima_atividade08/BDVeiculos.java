@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.iagohribeiro.iagohribeirolima_atividade07;
+package com.iagohribeiro.iagohribeirolima_atividade08;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +48,19 @@ public class BDVeiculos {
         listaPasseio.remove(veiculo);
     }
     
+    public void excluiPasseioCompleto()
+    {
+        listaPasseio.clear();
+    }
+    
     public void excluiCarga(Carga veiculo)
     {
         listaCarga.remove(veiculo);
+    }
+    
+    public void excluiCargaCompleto()
+    {
+        listaCarga.clear();
     }
     
     public List<Passeio> getPasseio()
